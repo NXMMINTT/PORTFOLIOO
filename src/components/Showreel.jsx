@@ -117,7 +117,7 @@ export default function Showreel() {
       <header className="block-head">
         <span className="block-no">03 —</span>
         <h2>SHOW<br />REEL</h2>
-        <p className="block-sub">วิดีโอที่ตัดต่อและผลิต {reel.length} ชิ้น<br />มีผลงานรวมมากกว่า 1,000+ ชิ้น<br />กดการ์ดเพื่อเล่นวิดีโอได้เลย</p>
+        <p className="block-sub"><strong className="rl-total">มีผลงานรวมมากกว่า 1,000+ ชิ้น</strong>วิดีโอที่ตัดต่อและผลิต {reel.length} ชิ้น<br />กดการ์ดเพื่อเล่นวิดีโอได้เลย</p>
       </header>
 
       <div className="rl-bar">

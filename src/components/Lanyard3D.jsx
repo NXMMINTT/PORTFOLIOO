@@ -4,7 +4,7 @@ import { Canvas, extend, useFrame } from '@react-three/fiber'
 import { Environment, Lightformer } from '@react-three/drei'
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from '@react-three/rapier'
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline'
-import { profile } from '../data/profile.js'
+import { contact, profile } from '../data/profile.js'
 
 extend({ MeshLineGeometry, MeshLineMaterial })
 
@@ -16,6 +16,7 @@ const TEX_W = 1024
 const TEX_H = Math.round((TEX_W * CARD_H) / CARD_W)
 const ROPE = 0.7 // ความยาวสายแต่ละช่วง (3 ช่วง)
 const ANCHOR = CARD_H / 2 + 0.3 // จุดที่สายต่อกับบัตร = ขอบบนของตัวหนีบ
+const CLICK_PX = 6 // กดแล้วปล่อยโดยเลื่อนเมาส์ไม่เกินนี้ = คลิก (พลิกบัตร) ไม่ใช่ลาก
 
 export default function Lanyard3D() {
   return (
@@ -50,12 +51,15 @@ function Band({ maxSpeed = 50, minSpeed = 0 }) {
   const quat = useMemo(() => new THREE.Quaternion(), [])
   const segmentProps = { type: 'dynamic', canSleep: true, colliders: false, angularDamping: 4, linearDamping: 4 }
 
-  const front = useCardTexture(drawFront)
-  const back = useCardTexture(drawBack)
+  const front = useCardTexture(drawFront, profile.photo)
+  const back = useCardTexture(drawBack, contact.lineQr)
   const strap = useStrapTexture()
   const [curve] = useState(() => new THREE.CatmullRomCurve3(Array.from({ length: 5 }, () => new THREE.Vector3())))
   const [dragged, drag] = useState(false)
   const [hovered, hover] = useState(false)
+  const [flipped, setFlipped] = useState(false)
+  const face = useRef() // หมุนเฉพาะหน้าตาบัตร (ฟิสิกส์ไม่เกี่ยว) เวลาพลิกหน้า/หลัง
+  const press = useRef(null)
 
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], ROPE])
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], ROPE])
@@ -69,6 +73,8 @@ function Band({ maxSpeed = 50, minSpeed = 0 }) {
   }, [hovered, dragged])
 
   useFrame((state, delta) => {
+    // พลิกบัตรนุ่ม ๆ ไปด้านหน้า (0) หรือด้านหลัง (π)
+    if (face.current) face.current.rotation.y = THREE.MathUtils.damp(face.current.rotation.y, flipped ? Math.PI : 0, 8, delta)
     if (dragged) {
       vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera)
       dir.copy(vec).sub(state.camera.position).normalize()
@@ -118,12 +124,20 @@ function Band({ maxSpeed = 50, minSpeed = 0 }) {
           <group
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
-            onPointerUp={(e) => { e.target.releasePointerCapture(e.pointerId); drag(false) }}
+            onPointerUp={(e) => {
+              e.target.releasePointerCapture(e.pointerId)
+              drag(false)
+              const p = press.current
+              if (p && Math.hypot(e.nativeEvent.clientX - p.x, e.nativeEvent.clientY - p.y) < CLICK_PX) setFlipped((f) => !f)
+              press.current = null
+            }}
             onPointerDown={(e) => {
               e.target.setPointerCapture(e.pointerId)
+              press.current = { x: e.nativeEvent.clientX, y: e.nativeEvent.clientY }
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())))
             }}
           >
+           <group ref={face}>
             <mesh position={[0, 0, 0.006]}>
               <planeGeometry args={[CARD_W, CARD_H]} />
               {/* ไม่รับแสง = สีตรงกับที่วาดเป๊ะ แดงสดเหมือนบัตรเดิม */}
@@ -150,6 +164,7 @@ function Band({ maxSpeed = 50, minSpeed = 0 }) {
               <torusGeometry args={[0.07, 0.018, 12, 32]} />
               <meshStandardMaterial color="#b5b5b5" metalness={1} roughness={0.25} />
             </mesh>
+           </group>
           </group>
         </RigidBody>
       </group>
@@ -163,7 +178,7 @@ function Band({ maxSpeed = 50, minSpeed = 0 }) {
 
 /* ---------- textures ---------- */
 
-function useCardTexture(draw) {
+function useCardTexture(draw, src) {
   const [tex] = useState(() => {
     const c = document.createElement('canvas')
     c.width = TEX_W
@@ -175,7 +190,7 @@ function useCardTexture(draw) {
   useEffect(() => {
     let alive = true
     const img = new Image()
-    img.src = profile.photo
+    img.src = src
     const paint = () => {
       if (!alive) return
       draw(tex.image.getContext('2d'), img.complete && img.naturalWidth ? img : null)
@@ -185,7 +200,7 @@ function useCardTexture(draw) {
     document.fonts.ready.then(paint)
     img.onload = paint
     return () => { alive = false }
-  }, [tex, draw])
+  }, [tex, draw, src])
   return tex
 }
 
@@ -336,19 +351,93 @@ function drawFront(g, img) {
   g.restore()
 }
 
-// หลังบัตร
-function drawBack(g) {
+// หลังบัตร: หัวบัตรแบบด้านหน้า / LET'S TALK / QR ในกรอบช่องมองภาพกล้อง / ป้าย LINE ID / แถบฟิล์มล่าง
+function drawBack(g, img) {
   cardShape(g)
   watermark(g, profile.since.slice(-2))
   g.fillStyle = '#fff'
+  g.textBaseline = 'alphabetic'
+
+  // หัวบัตร ให้เข้าชุดกับด้านหน้า
+  g.font = `600 50px ${SANS}`
+  g.letterSpacing = '4px'
+  g.textAlign = 'left'
+  g.fillText('CONTACT', 80, 150)
+  g.textAlign = 'right'
+  g.fillText('B-SIDE', TEX_W - 80, 150)
+
   g.textAlign = 'center'
-  g.font = `800 92px ${SANS}`
-  g.letterSpacing = '6px'
-  g.fillText(profile.handle.toUpperCase(), TEX_W / 2, TEX_H / 2)
+  g.font = `800 104px ${SANS}`
+  g.letterSpacing = '4px'
+  g.fillText("LET'S TALK!", TEX_W / 2, 300)
+  g.font = `500 36px ${THAI}`
+  g.letterSpacing = '0px'
+  g.globalAlpha = 0.9
+  g.fillText('สแกน QR แอดไลน์ คุยงานได้เลย', TEX_W / 2, 362)
+  g.globalAlpha = 1
+
+  // QR บนการ์ดขาวมีเงา
+  const box = 540, bx = (TEX_W - box) / 2, by = 430, pad = 28
+  g.save()
+  g.shadowColor = 'rgba(0, 0, 0, .35)'
+  g.shadowBlur = 40
+  g.shadowOffsetY = 14
+  g.beginPath()
+  g.roundRect(bx, by, box, box, 36)
+  g.fill()
+  g.restore()
+  if (img) g.drawImage(img, bx + pad, by + pad, box - pad * 2, box - pad * 2)
+
+  // มุมช่องมองภาพกล้องรอบ QR
+  const o = 34, len = 78
+  g.strokeStyle = '#fff'
+  g.lineWidth = 9
+  g.lineCap = 'round'
+  ;[[bx - o, by - o, 1, 1], [bx + box + o, by - o, -1, 1], [bx - o, by + box + o, 1, -1], [bx + box + o, by + box + o, -1, -1]].forEach(([x, y, sx, sy]) => {
+    g.beginPath()
+    g.moveTo(x, y + sy * len)
+    g.lineTo(x, y)
+    g.lineTo(x + sx * len, y)
+    g.stroke()
+  })
+
+  // ป้าย LINE ID สีขาว
+  const label = 'LINE ID', id = contact.line
+  g.font = `600 30px ${SANS}`
+  g.letterSpacing = '4px'
+  const lw = g.measureText(label).width
+  g.font = `800 50px ${SANS}`
+  g.letterSpacing = '1px'
+  const iw = g.measureText(id).width
+  const gap = 26, pw = lw + gap + iw + 96, ph = 96, px = (TEX_W - pw) / 2, py = 1065
+  g.beginPath()
+  g.roundRect(px, py, pw, ph, ph / 2)
+  g.fill()
+  g.textAlign = 'left'
+  g.fillStyle = '#e50914'
+  g.font = `600 30px ${SANS}`
+  g.letterSpacing = '4px'
+  g.fillText(label, px + 48, py + 60)
+  g.fillStyle = '#7a050c'
+  g.font = `800 50px ${SANS}`
+  g.letterSpacing = '1px'
+  g.fillText(id, px + 48 + lw + gap, py + 66)
+
+  // แถบฟิล์มด้านล่าง: รูหนามเตยบน-ล่าง + ชื่อช่อง
+  const fy = 1250, fh = 130
+  g.fillStyle = 'rgba(0, 0, 0, .38)'
+  g.fillRect(0, fy, TEX_W, fh)
+  g.fillStyle = 'rgba(255, 255, 255, .85)'
+  for (let x = 14; x < TEX_W; x += 64) {
+    g.beginPath()
+    g.roundRect(x, fy + 12, 34, 20, 5)
+    g.roundRect(x, fy + fh - 32, 34, 20, 5)
+    g.fill()
+  }
+  g.fillStyle = '#fff'
+  g.textAlign = 'center'
   g.font = `600 32px ${SANS}`
   g.letterSpacing = '10px'
-  g.globalAlpha = 0.85
-  g.fillText('VIDEO EDITOR PORTFOLIO', TEX_W / 2, TEX_H / 2 + 70)
-  g.globalAlpha = 1
+  g.fillText(`${profile.handle.toUpperCase()} · VIDEO EDITOR`, TEX_W / 2, fy + fh / 2 + 11)
   g.restore()
 }

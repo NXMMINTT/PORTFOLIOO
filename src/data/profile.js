@@ -69,6 +69,18 @@ export const works = [
     link: DRIVE('1_n_XVfUXreq-7gIyLnbi66meqhwEcGTf'),
   },
     {
+    title: 'รักต้องห้าม คุณหนูปากร้ายกับเชฟมะนาว EP.1',
+    titleEn: 'Forbidden Love: The Sharp-Tongued Heiress & Chef Lime',
+    year: 2026,
+    type: 'AI Video · ละครสั้น',
+    role: 'ผลิตด้วย AI · ตัดต่อ',
+    duration: 'แนวตั้ง 9:16',
+    description: 'ละครสั้นตัวละครผลไม้ สร้างภาพทั้งหมดด้วย AI',
+    colors: ['#be123c', '#1c1917'],
+    image: '/images/works/lime1.jpg',
+    link: 'https://www.tiktok.com/@crazyboneman0/video/7638246035487296775',
+  },
+    {
     title: 'Microsystem',
     titleEn: 'Microsystem Series',
     year: 2026,
@@ -80,8 +92,19 @@ export const works = [
     image: '/images/works/micro2.jpg',
     link: DRIVE('16ih-irhAcj3hJk8JH0t9zbhRSvk9kjCN'),
   },
+  {
+    title: 'คณะศึกษาศาสตร์ มศว',
+    titleEn: 'Faculty of Education, SWU',
+    year: 2026,
+    type: 'วิดีโอองค์กร · 16:9 Production',
+    role: 'ตัดต่อ',
+    duration: 'แนวนอน 16:9',
+    description: 'วิดีโอแนะนำคณะศึกษาศาสตร์ มหาวิทยาลัยศรีนครินทรวิโรฒ',
+    colors: ['#0e7490', '#0f172a'],
+    image: '/images/works/swu.jpg',
+    link: 'https://www.facebook.com/reel/1177899304479803',
+  },
 
-  
 ]
 
 // วิดีโอทั้งหมดจาก Google Drive (cat: ai | ads | tiktok | youtube) — ใส่ tiktok: / ig: / fb: / yt: "ลิงก์คลิป" ได้ เว็บจะเล่นจาก TikTok / Instagram / Facebook / YouTube แทน Drive
@@ -90,9 +113,11 @@ export const videos = [
   { cat: 'ai', client: 'Masterart', title: 'สิงห์น่ะทำ EP.1', img: 'singha1', id: '1_n_XVfUXreq-7gIyLnbi66meqhwEcGTf' },
   { cat: 'ai', client: 'Elephant', title: 'ปลั๊กไฟเรืองแสง', img: 'plug', id: '1LkhuqlAWazbmjI9xnQ2TcOm1KICfNRJv', tiktok: 'https://www.tiktok.com/@elephantbrand_th/video/7668546075560578324' },
   { cat: 'ai', client: '', title: 'ถ้ากระเพาะไม่โดนน้ำเลย 7 วัน', img: 'stomach7', tiktok: 'https://www.tiktok.com/@crazyboneman0/video/7632675612754218261' },
+  { cat: 'ai', client: '', title: 'รักต้องห้าม คุณหนูปากร้ายกับเชฟมะนาว EP.1', img: 'lime1', tiktok: 'https://www.tiktok.com/@crazyboneman0/video/7638246035487296775' },
   { cat: 'ai', client: '', title: 'โฆษณาทิชชู่', img: 'tissue', id: '1JnObNFEvPr8AhCiQB_4sqKFgJ5Zn0wID' },
   { cat: 'ai', client: '', title: 'เครื่องจักร', img: 'machine', id: '1KsCX-1uEZo7ZK1r1TjvigW3T0zDe8Zei', wide: true },
   { cat: 'ai', client: 'ศึกษาศาสตร์', title: 'เฉลิมพระเกียรติ', img: 'edu3', id: '1cH32av90kjTK6T3JCHZlrGDXqJopXebH' },
+  { cat: 'ads', client: 'ศึกษาศาสตร์ มศว', title: 'คณะศึกษาศาสตร์ มศว', img: 'swu', wide: true, fb: 'https://www.facebook.com/reel/1177899304479803' },
   { cat: 'ads', client: 'Elysium', title: 'Elysium', img: 'elysium', id: '1sWXUjDfGIydXeN0P9zu4Cm27y47ecNdW' },
   { cat: 'ads', client: 'Dr.Tattoo', title: 'Dr.Tattoo (4K)', img: 'drtattoo', id: '1YVv8AbD97t6_0KUsWsSvmGkk0E6urW6T', wide: true },
   { cat: 'ads', client: 'สิริ เพลส', title: 'สิริ เพลส', img: 'siriplace', id: '1C28hZwb025bnrHtm0DGiE_f8jzkarS-t', tiktok: 'https://www.tiktok.com/@sansiriplc/video/7579502815232511249' },
@@ -188,6 +213,7 @@ export const contact = {
   email: 'Siriya.kforwork@gmail.com',
   phone: '095-874-0805',
   line: '0997281137kk',
+  lineQr: '/images/line-qr.png', // QR แอดไลน์ — โชว์หลังบัตรห้อยคอ (คลิกบัตรเพื่อพลิก)
   links: [
     { label: 'Facebook: Cookies Smile', url: 'https://www.facebook.com/siriya.kongthai.5/' },
     { label: 'Email', url: 'mailto:Siriya.kforwork@gmail.com' },
@@ -199,6 +225,8 @@ const descs = {
   elysium: 'วิดีโอโฆษณาแนวตั้ง โทนแสงไฟยามค่ำคืน',
   monday: 'วิดีโอความรู้สำหรับ Masterart ตัวละครสร้างด้วย AI',
   singha1: 'วิดีโอสำหรับ Masterart สร้างภาพด้วย AI',
+  lime1: 'ละครสั้นตัวละครผลไม้ สร้างภาพทั้งหมดด้วย AI',
+  swu: 'วิดีโอแนะนำคณะศึกษาศาสตร์ มหาวิทยาลัยศรีนครินทรวิโรฒ',
   green: 'วิดีโอความรู้สำหรับ Masterart ตัวละครสร้างด้วย AI',
   plug: 'โฆษณาปลั๊กไฟ Elephant ที่ใช้ AI ช่วยสร้างภาพ',
   plate: 'คลิป TikTok สำหรับเพจโชคดีทะเบียน',
@@ -208,7 +236,7 @@ const descs = {
   micro2: 'คลิป TikTok สำหรับ Microsystem — กำกับ ถ่ายทำ และตัดต่อ',
   micro3: 'คลิป TikTok สำหรับ Microsystem — กำกับ ถ่ายทำ และตัดต่อ',
 }
-const featured = ['elysium', 'monday', 'singha1', 'plug', 'green', 'plate', 'pangwow', 'tajmahal']
+const featured = ['elysium', 'monday', 'singha1', 'swu', 'lime1', 'plug', 'green', 'plate', 'pangwow', 'tajmahal']
 const catName = { ai: 'AI Video', ads: 'วิดีโอโฆษณา', tiktok: 'คลิป TikTok', youtube: 'คลิป YouTube' }
 
 export const reel = [

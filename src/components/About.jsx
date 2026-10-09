@@ -22,7 +22,7 @@ export default function About({ dark, onToggleTheme }) {
         <Suspense fallback={<div className="lanyard3d" />}>
           <Lanyard3D />
         </Suspense>
-        <p className="lanyard3d-label">✦ ลองลากป้ายเล่นดูสิ ✦</p>
+        <p className="lanyard3d-label">✦ ลากเล่นได้ · คลิกเพื่อพลิกดูด้านหลัง ✦</p>
       </div>
 
       <div className="ab-body">

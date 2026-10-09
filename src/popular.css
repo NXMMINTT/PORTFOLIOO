@@ -1,4 +1,5 @@
 /* ================= SHOW REEL — ตารางการ์ด + หน้าต่างเล่นวิดีโอ ================= */
+.rl-total { display: block; margin-bottom: 6px; font-size: 22px; font-weight: 700; color: var(--ink); }
 .rl-bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
 .rl-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
 .rl-tools { display: flex; align-items: center; gap: 12px; }

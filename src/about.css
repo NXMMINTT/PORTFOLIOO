@@ -29,8 +29,8 @@
 .ab-intro { display: grid; grid-template-columns: minmax(0, 1fr) 224px; gap: 0 40px; padding-right: 32px; align-items: start; }
 .ab-socials { display: flex; flex-direction: column; gap: 8px; margin-top: -24px; }
 /* หัวข้อเล็กเหนือการ์ดช่อง */
-.ab-socials-title { display: flex; align-items: center; gap: 7px; margin: 0 0 2px 6px; font-size: 12px; font-weight: 600; color: var(--mute); }
-.ab-socials-title::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--red, #e50914); }
+.ab-socials-title { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 0 4px; font-size: 17px; font-weight: 700; color: var(--red, #e50914); }
+.ab-socials-title::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--red, #e50914); }
 .social {
   --brand: var(--red, #e50914);
   position: relative; display: flex; align-items: center; gap: 9px; height: 36px; padding: 0 16px 0 4px;
