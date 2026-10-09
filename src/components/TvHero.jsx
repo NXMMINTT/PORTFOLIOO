@@ -1,13 +1,7 @@
 import { useEffect, useState } from 'react'
 import { contact, profile, works } from '../data/profile.js'
+import { navLinks } from './navLinks.js'
 import Poster from './Poster.jsx'
-
-const navLinks = [
-  ['#profile', 'Profile'],
-  ['#journey', 'Experience'],
-  ['#showreel', 'Showreel'],
-  ['#posters', 'AI Poster'],
-]
 
 // ไทม์โค้ดเดินแบบกล้องกำลังอัด (25 fps) นับจากตอนเปิดหน้า
 function Timecode() {
@@ -57,7 +51,7 @@ export default function TvHero() {
             <a key={href} href={href}><small>{String(i + 1).padStart(2, '0')}</small>{label}</a>
           ))}
         </nav>
-        <a href="#contact" className="tv-cta">ติดต่องาน <span aria-hidden="true">↗</span></a>
+        <a href="#contact" className="tv-cta">ติดต่องาน</a>
       </header>
 
       <div className="tv-left">
@@ -66,16 +60,27 @@ export default function TvHero() {
           {first.slice(0, half)}&nbsp;&nbsp;<b>{first.slice(half)}</b> <span className="q">”</span>
         </p>
         <p className="seek">ตำแหน่งที่สนใจ:<br /><b>{profile.position}</b></p>
-        <p className="tv-contact">Tel: {contact.phone}<br />e-mail: {contact.email}</p>
+        <div className="tv-contact">
+          <a href={`tel:${contact.phone.replace(/[\s-]/g, '')}`}>
+            <span className="tc-ico" aria-hidden="true">☎</span>
+            <span><small>TEL</small>{contact.phone}</span>
+          </a>
+          <a href={`mailto:${contact.email}`}>
+            <span className="tc-ico" aria-hidden="true">✉</span>
+            <span><small>E-MAIL</small>{contact.email}</span>
+          </a>
+        </div>
       </div>
 
       <div className="stage">
         <div className="polaroid-sm p-work" aria-hidden="true">
-          <div className="p-img"><Poster work={works[0]} small /></div>
+          <div className="p-img">
+            {profile.snapPhoto ? <img src={profile.snapPhoto} alt="" /> : <Poster work={works[0]} small />}
+          </div>
         </div>
         <div className="polaroid-sm p-me">
           <div className="p-img p-face">
-            {profile.photo ? <img src={profile.photo} alt={profile.name} /> : <span>{initials}</span>}
+            {profile.heroPhoto ? <img src={profile.heroPhoto} alt={profile.name} /> : <span>{initials}</span>}
           </div>
         </div>
 
@@ -135,7 +140,6 @@ export default function TvHero() {
         <svg className="flower" viewBox="0 0 40 40" aria-hidden="true">
           <path d="M20 4c4 0 6 5 4 9 4-2 9 0 9 4s-5 6-9 4c2 4 0 9-4 9s-6-5-4-9c-4 2-9 0-9-4s5-6 9-4c-2-4 0-9 4-9z" />
         </svg>
-        <p className="years">{profile.years}</p>
       </div>
     </section>
   )

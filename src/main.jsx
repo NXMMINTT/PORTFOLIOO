@@ -9,6 +9,7 @@ import './neon.css'
 import './theme-red.css'
 import './about.css'
 import './contact.css'
+import './stickynav.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

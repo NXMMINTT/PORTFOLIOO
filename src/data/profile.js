@@ -12,8 +12,11 @@ export const profile = {
   role: 'Video Editor · ตัดต่อวิดีโอสั้น-ยาว และผลิตสื่อด้วย AI',
   tagline: 'เล่าเรื่องผ่านการตัดต่อ และใช้ AI สร้างภาพที่กล้องถ่ายไม่ได้',
   photo: '/images/siriya-square.jpg', // รูปเต็มอยู่ที่ /images/siriya.jpg
+  heroPhoto: '/images/siriya-square.jpg', // โพลารอยด์ใหญ่หน้าแรก
+  snapPhoto: '/images/siriya-flowers.jpg', // โพลารอยด์เล็กหน้าแรก (ว่างไว้จะใช้โปสเตอร์ผลงานแทน)
   handle: 'siriya.film',
   since: '2020',
+  cardTag: 'COOKIE', // ข้อความในวงเล็บบนบัตร ID
   years: '2021–2026',
   university: 'มหาวิทยาลัยศรีปทุม\nภาพยนตร์และสื่อดิจิทัล',
   position: 'Video Editor · AI Creator',
@@ -157,12 +160,20 @@ export const skills = [
   'ปรับตัวเข้ากับสิ่งแวดล้อมใหม่ ๆ ได้ดี',
 ]
 
-// ทักษะแบ่งหมวด — ใช้ในหน้า ABOUT ME (การ์ดชิป)
+// ทักษะแบ่งหมวด — ใช้ในหน้า ABOUT ME (การ์ดชิป) · ชิปเป็นข้อความ หรือ { name, tools: [...] } เพื่อแยกเป็นหัวข้อย่อยพร้อมชิปเครื่องมือ
 export const skillGroups = [
-  { title: 'Editing', sub: 'โปรแกรมตัดต่อและออกแบบ', items: ['DaVinci Resolve', 'Premiere Pro', 'CapCut', 'Canva'] },
-  { title: 'AI Creative', sub: 'สร้างภาพและวิดีโอด้วย AI', items: ['AI Video', 'AI Poster', 'การใช้ AI ในการผลิตสื่อวิดีโอ'] },
-  { title: 'Production', sub: 'ตำแหน่งที่เคยออกกอง', items: ['ตัดต่อ', 'เขียนบท', 'กำกับการแสดง', 'ผู้ช่วยผู้กำกับ'] },
-  { title: 'Soft Skills', sub: 'สไตล์การทำงาน', items: ['บริหารจัดการเวลา', 'เรียนรู้เร็ว', 'มีโฟกัสในการทำงาน', 'ปรับตัวได้ดี'] },
+  { title: 'Editing', sub: 'โปรแกรมตัดต่อและออกแบบ', items: ['DaVinci Resolve', 'Premiere Pro', 'Adobe After Effects', 'Adobe Illustrator', 'CapCut', 'Canva'] },
+  {
+    title: 'AI Creative Skills',
+    sub: 'สร้างภาพ วิดีโอ เรื่อง และเสียงด้วย AI',
+    items: [
+      { name: 'AI Image & Video Generation', tools: ['ChatGPT', 'Grok', 'Flow', 'Gemini', 'Kling'] },
+      { name: 'AI Storytelling & Storyboarding', tools: ['ChatGPT', 'Claude'] },
+      { name: 'AI Voiceover Generation', tools: ['Google AI'] },
+    ],
+  },
+  { title: 'Production', sub: 'ตำแหน่งที่เคยออกกอง', items: ['ผู้กำกับ', 'ผู้ช่วยผู้กำกับ', 'ตัดต่อ', 'เขียนบท', 'กำกับการแสดง'] },
+  { title: 'Soft Skills', sub: 'สไตล์การทำงาน', items: ['พร้อมเรียนรู้เทคโนโลยีและทักษะใหม่ ๆ', 'สื่อสารและถ่ายทอดไอเดียได้ชัดเจน', 'มีความคิดสร้างสรรค์ คิดไอเดียใหม่ ๆ'] },
 ]
 
 // โปรแกรม (คะแนนเต็ม 5 ตามเรซูเม่)
@@ -171,19 +182,21 @@ export const programs = [
   { name: 'Premiere Pro', short: 'Pr', level: 3 },
   { name: 'CapCut', short: 'Cc', level: 4 },
   { name: 'Canva', short: 'Ca', level: 4 },
+  { name: 'Adobe After Effects', short: 'Ae' },
+  { name: 'Adobe Illustrator', short: 'Ai' },
 ]
 
 export const education = [
-  { year: '2020 – 2024', title: 'มหาวิทยาลัยศรีปทุม', detail: 'คณะนิเทศศาสตร์ สาขาภาพยนตร์และสื่อดิจิทัล' },
+  { year: '2020 – 2024', title: 'มหาวิทยาลัยศรีปทุม', detail: 'คณะนิเทศศาสตร์ สาขาภาพยนตร์และสื่อดิจิทัล', honors: 'เกียรตินิยมอันดับ 2' },
   { year: '2017 – 2019', title: 'โรงเรียนเกษมพิทยา', detail: '' },
   { year: '2007 – 2016', title: 'โรงเรียนอนุบาลพุทธชาติ', detail: '' },
 ]
 
 export const experience = [
-  { year: '2026', now: true, icon: '🎬', title: 'ฟรีแลนซ์ & ครีเอเตอร์', roles: ['ตัดต่อ', 'ฟรีแลนซ์'], clients: ['อินฟลูเอนเซอร์', 'Toyota', 'Ririko'], detail: 'รับงานตัดต่ออิสระร่วมกับอินฟลูเอนเซอร์และแบรนด์ และเปิดช่อง TikTok ของตัวเอง' },
-  { year: '2025', icon: '✂️', title: 'Video Editor', roles: ['ตัดต่อ'], clients: ['ฟาร์มา บางกอก', 'ธรรมดี โปรดักชัน'], detail: 'บริษัทขายผลิตภัณฑ์เสริมอาหาร · บริษัทผลิตสื่อวิดีโอ' },
-  { year: '2024', icon: '🎞️', title: 'Video Editor', roles: ['ตัดต่อ'], clients: ['We Kids Smile', 'Lakorn Film', 'JL Home', 'Tuya Thailand'], detail: 'บริษัทละครสั้น · บริษัทขายอุปกรณ์สมาร์ทโฮม' },
-  { year: '2023', icon: '🍸', title: 'The Lovers บาร์ลับทำนายรัก', roles: ['ผู้ช่วยผู้กำกับ', 'เขียนบท', 'ตัดต่อ'], clients: [], detail: 'ภาพยนตร์สั้น — ได้ฉายในโรงภาพยนตร์ที่เซ็นทรัลเวิลด์' },
+  { year: '2026', now: true, icon: '🎬', title: 'ฟรีแลนซ์ & ครีเอเตอร์', roles: ['ตัดต่อ', 'ฟรีแลนซ์'], clients: ['อินฟลูเอนเซอร์', 'Toyota', 'Ririko', 'Master Art', 'Elephant', 'มหาวิทยาลัยศรีนครินทรวิโรฒ'], detail: 'รับงานตัดต่ออิสระร่วมกับอินฟลูเอนเซอร์และแบรนด์ และเปิดช่อง TikTok ของตัวเอง' },
+  { year: '2025', icon: '✂️', title: 'Video Editor', roles: ['ตัดต่อ'], clients: ['ธรรมดี โปรดักชั่น'], detail: 'บริษัทผลิตสื่อวิดีโอ' },
+  { year: '2024', icon: '🎞️', title: 'Video Editor', roles: ['ตัดต่อ'], clients: ['We Kids Smile', 'JL Home'], detail: 'บริษัทละครสั้น · บริษัทขายอุปกรณ์สมาร์ทโฮม' },
+  { year: '2023', icon: '🍸', title: 'The Lovers บาร์ลับทำนายรัก', roles: ['ผู้ช่วยผู้กำกับ', 'เขียนบท', 'ตัดต่อ'], clients: [], detail: 'ภาพยนตร์สั้น — ฉายในโรงภาพยนตร์ SF World Cinema CentralWorld เมื่อวันที่ 19 ธันวาคม พ.ศ. 2566' },
   { year: '2022', icon: '🌙', title: 'LATE NIGHT', roles: ['ผู้ช่วยผู้กำกับ', 'เขียนบท', 'ตัดต่อ'], clients: [], detail: 'ภาพยนตร์สั้นในมหาวิทยาลัย' },
   { year: '2021', icon: '🎥', title: 'Alive or Dead', roles: ['ผู้กำกับ', 'ตัดต่อ'], clients: [], detail: 'ภาพยนตร์สั้นในมหาวิทยาลัย' },
 ]

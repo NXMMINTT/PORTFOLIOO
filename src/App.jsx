@@ -7,6 +7,7 @@ import Journey from './components/Journey.jsx'
 import Poster from './components/Poster.jsx'
 import PosterGallery from './components/PosterGallery.jsx'
 import Showreel from './components/Showreel.jsx'
+import StickyNav from './components/StickyNav.jsx'
 import TvHero from './components/TvHero.jsx'
 import useReveal from './components/useReveal.js'
 
@@ -40,6 +41,7 @@ export default function App() {
 
   return (
     <div className="page">
+      <StickyNav />
       <TvHero />
 
       {/* ส่วนที่เหลืออยู่ในกรอบตรงกลาง — มีแค่หน้าทีวีด้านบนที่เต็มจอ */}

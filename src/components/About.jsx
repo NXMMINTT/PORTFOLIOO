@@ -38,19 +38,31 @@ export default function About({ dark, onToggleTheme }) {
                 <h4>{g.title}</h4>
                 <small>{g.sub}</small>
               </header>
-              <ul className="ab-chips">
-                {g.items.map((item) => (
-                  <li key={item}>
-                    {shortOf[item] ? <b className="ab-ico">{shortOf[item]}</b> : <i className="ab-dot" />}
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              {g.items[0]?.tools ? (
+                // แยกเป็นหัวข้อย่อยต่อทักษะ แล้วเครื่องมือเป็นชิปของตัวเอง
+                g.items.map((item) => (
+                  <div key={item.name} className="ab-sub">
+                    <h5><i className="ab-dot" />{item.name}</h5>
+                    <ul className="ab-chips">
+                      {item.tools.map((t) => <li key={t}>{t}</li>)}
+                    </ul>
+                  </div>
+                ))
+              ) : (
+                <ul className="ab-chips">
+                  {g.items.map((item) => (
+                    <li key={item}>
+                      {shortOf[item] ? <b className="ab-ico">{shortOf[item]}</b> : <i className="ab-dot" />}
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </article>
           ))}
         </div>
 
-        <p className="ab-sticky"> พร้อมรับงานใหม่!</p>
+        <p className="ab-sticky"> พร้อมรับงาน!</p>
       </div>
     </section>
   )

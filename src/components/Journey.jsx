@@ -51,12 +51,21 @@ export default function Journey() {
         <div className="tl-end">
           {/* แสดงเฉพาะระดับมหาวิทยาลัย — ตั๋วใบสุดท้ายปลายเส้น */}
           {education.slice(0, 1).map((e) => (
+            // ตั๋วการศึกษาสีกลับด้าน (ตัวแดง ต้นขั้วดำทอง) + ตราเกียรตินิยมสีทอง ให้ต่างจากตั๋วงาน
             <div key={e.title} className="xt-wrap edu">
+              {e.honors && (
+                <span className="edu-seal" aria-label={e.honors}>
+                  <small>HONORS</small>
+                  <b>2<sup>nd</sup></b>
+                  <small>CLASS</small>
+                </span>
+              )}
               <article className="xt">
                 <div className="xt-body">
-                  <p className="xt-top"><span>🎓 การศึกษา</span></p>
+                  <p className="xt-top"><span>🎓 การศึกษา · {e.year}</span></p>
                   <h3>{e.title}</h3>
                   {e.detail && <p className="xt-desc">{e.detail}</p>}
+                  {e.honors && <p className="edu-honors">★ {e.honors}</p>}
                 </div>
                 <div className="xt-stub" aria-hidden="true">
                   <small>CLASS OF</small>

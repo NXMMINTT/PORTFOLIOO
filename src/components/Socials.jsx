@@ -29,14 +29,12 @@ export default function Socials() {
           >
             <span className="social-logo">{logos[s.platform]}</span>
             <span className="social-text">
-              <small>{s.label}</small>
               <strong>{s.handle || '@ชื่อช่อง'}</strong>
             </span>
             <span className="social-count">
               <b>{s.followers || '—'}</b>
               <small>ผู้ติดตาม</small>
             </span>
-            <span className="social-go" aria-hidden="true">↗</span>
           </Tag>
         )
       })}

@@ -39,7 +39,7 @@
 .reel circle { fill: #1a1a1a; }
 .reel .hole { fill: var(--red); }
 .iam b { color: var(--red); }
-.q, .keep, .years { color: var(--red); }
+.q, .keep { color: var(--red); }
 .box { background: var(--red); color: #fff; }
 .flower { stroke: var(--red); }
 

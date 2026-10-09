@@ -23,9 +23,8 @@
 .ab-lead { margin-top: 30px; max-width: 62ch; font-size: 16px; line-height: 1.75; }
 .ab-note { margin-top: 10px; max-width: 62ch; font-size: 14px; line-height: 1.6; color: var(--mute); }
 
-
 /* ----- ช่อง YouTube / TikTok: การ์ดเล็กเรียงแนวตั้ง ข้างข้อความแนะนำตัว ----- */
-.ab-intro { display: grid; grid-template-columns: minmax(0, 1fr) 224px; gap: 0 40px; align-items: start; }
+.ab-intro { display: grid; grid-template-columns: minmax(0, 1fr) 224px; gap: 0 40px; padding-right: 32px; align-items: start; }
 .ab-socials { display: flex; flex-direction: column; gap: 8px; margin-top: -24px; }
 .social {
   --brand: var(--red, #e50914);
@@ -47,13 +46,10 @@ a.social:hover .social-logo { transform: translateX(3px); background: var(--chro
 /* โลโก้ TikTok แบบมีเงาฟ้า-แดง */
 .social-logo .tt { width: 13px; fill: #fff; filter: drop-shadow(-1.2px -.8px 0 #25f4ee) drop-shadow(1.2px .8px 0 #fe2c55); }
 .social-text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.2; }
-.social-text small { font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
 .social-text strong { font-size: 11px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .social-count { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.15; }
 .social-count b { font-size: 12.5px; font-weight: 800; letter-spacing: -.01em; }
 .social-count small { font-size: 8px; color: var(--mute); }
-.social-go { position: absolute; top: 50%; right: 7px; transform: translateY(-50%); font-size: 8px; color: var(--mute); transition: color .3s; }
-a.social:hover .social-go { color: var(--brand); }
 
 .ab-label { margin: 40px 0 14px; font-size: 15px; font-weight: 600; }
 .ab-label span { color: var(--red, var(--ink)); font-size: 11px; margin-left: 4px; }
@@ -81,7 +77,12 @@ a.social:hover .social-go { color: var(--brand); }
   display: grid; place-items: center; width: 20px; height: 20px; border-radius: 5px;
   border: 1px solid var(--red, var(--ink)); color: var(--red, var(--ink)); font-size: 9px; font-weight: 700;
 }
-.ab-dot { width: 6px; height: 6px; margin-left: 4px; border-radius: 50%; background: var(--red, var(--ink)); }
+.ab-sub { margin-top: 14px; }
+.ab-sub h5 { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; }
+.ab-sub h5 .ab-dot { margin-left: 0; }
+.ab-sub .ab-chips { margin-top: 8px; padding-left: 14px; }
+.ab-sub .ab-chips li { padding: 4px 12px; font-size: 12px; }
+.ab-dot { flex: none; width: 6px; height: 6px; margin-left: 4px; border-radius: 50%; background: var(--red, var(--ink)); }
 
 /* โน้ตแปะ "พร้อมรับงานใหม่!" */
 .ab-sticky {
@@ -100,6 +101,6 @@ a.social:hover .social-go { color: var(--brand); }
   .ab-card { position: static; margin-bottom: 30px; }
   .ab-card .lanyard { margin: 0 auto; }
   .ab-grid { grid-template-columns: 1fr; }
-  .ab-intro { grid-template-columns: 1fr; }
+  .ab-intro { grid-template-columns: 1fr; padding-right: 0; }
   .ab-socials { margin-top: 22px; width: min(100%, 240px); }
 }

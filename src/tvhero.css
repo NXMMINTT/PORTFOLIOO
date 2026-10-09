@@ -18,8 +18,8 @@
 .tv-brand:hover .brand-stick { transform: rotate(-14deg); animation: none; }
 @keyframes clap { 0% { transform: rotate(-24deg); } 60% { transform: rotate(0); } 75% { transform: rotate(-4deg); } 100% { transform: rotate(0); } }
 
-/* ไทม์โค้ดกลางแถบ */
-.tv-tc { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: 'Courier Prime', monospace; font-size: clamp(12px, .75vw, 15px); letter-spacing: .12em; color: var(--mute); font-variant-numeric: tabular-nums; }
+/* ไทม์โค้ดข้างโลโก้ (ไม่วางกึ่งกลาง เพราะเมนูกว้างจะบัง) */
+.tv-tc { white-space: nowrap; font-family: 'Courier Prime', monospace; font-size: clamp(12px, .75vw, 15px); letter-spacing: .12em; color: var(--mute); font-variant-numeric: tabular-nums; }
 .tv-tc b { color: var(--red, #e50914); margin-right: 6px; }
 
 /* เมนูในแคปซูล — เลื่อนเมาส์แล้วพื้นแดง */
@@ -38,27 +38,43 @@
   background: var(--red, #e50914); color: #fff; font-size: clamp(13px, .75vw, 16px); font-weight: 600;
   box-shadow: 0 10px 24px -8px rgba(229, 9, 20, .6); transition: transform .25s, box-shadow .25s;
 }
-.tv-cta span { transition: transform .25s; }
 .tv-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -8px rgba(229, 9, 20, .8); }
-.tv-cta:hover span { transform: translate(2px, -2px); }
 
 .tv-left { display: flex; flex-direction: column; justify-content: center; gap: 34px; padding-bottom: 20px; }
 .iam { font-size: clamp(30px, 3vw, 76px); font-weight: 500; letter-spacing: .03em; line-height: 1.15; }
 .iam b { font-weight: 800; }
 .q { font-family: var(--serif); font-size: .9em; vertical-align: top; }
-.seek { font-size: clamp(13px, .8vw, 17px); line-height: 1.5; }
-.tv-contact { font-size: clamp(12px, .7vw, 15px); line-height: 1.6; position: absolute; bottom: 30px; left: var(--hgut); }
+.seek { font-size: clamp(15px, 1.1vw, 21px); line-height: 1.45; }
+.seek b { display: inline-block; margin-top: 2px; font-size: 1.3em; }
+.tv-contact { position: absolute; bottom: 30px; left: var(--hgut); display: flex; flex-direction: column; gap: 8px; }
+/* แคปซูลเบอร์โทร/อีเมล ทรงเดียวกับการ์ดช่อง TikTok — กดโทรหรือส่งเมลได้ */
+.tv-contact a {
+  display: flex; align-items: center; gap: 10px; width: fit-content; height: 38px; padding: 0 18px 0 4px;
+  border-radius: 999px; background: var(--panel); font-size: clamp(12px, .72vw, 14px); font-weight: 600;
+  transition: box-shadow .3s;
+}
+.tv-contact a:hover { box-shadow: 0 0 0 1px var(--red, #e50914), 0 10px 22px -12px var(--red, #e50914); }
+.tv-contact a > span:last-child { display: flex; flex-direction: column; line-height: 1.15; }
+.tv-contact small { font-size: 8.5px; font-weight: 500; letter-spacing: .14em; color: var(--mute); }
+.tc-ico {
+  display: grid; place-items: center; width: 44px; height: 30px; border-radius: 999px; font-size: 13px; color: #fff;
+  background: linear-gradient(90deg, #0b0b0b, #2a2a2a 55%, #0b0b0b); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+  transition: transform .35s cubic-bezier(.5, 0, .2, 1.4), background .3s;
+}
+.tv-contact a:hover .tc-ico { transform: translateX(3px); background: var(--chrome); }
 
 .tv-right { position: relative; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; }
 .collect { font-weight: 700; font-size: clamp(15px, 1vw, 22px); letter-spacing: .03em; line-height: 2.1; text-align: right; text-transform: uppercase; }
 .box { background: var(--ink); color: var(--bg); padding: 2px 6px; margin-right: 4px; }
 .keep { position: absolute; right: -14px; top: 18%; writing-mode: vertical-rl; font-family: 'Courier Prime', monospace; font-size: 13px; letter-spacing: .25em; }
 .flower { width: 38px; margin: 40px 50px 0 0; fill: none; stroke: var(--ink); stroke-width: 1.4; animation: spin 18s linear infinite; }
-.years { position: absolute; bottom: 0; right: 0; font-weight: 600; font-size: clamp(14px, .8vw, 17px); }
 
 /* ----- stage ----- */
 .stage { position: relative; width: 580px; height: 540px; justify-self: center; align-self: center; }
 /* ขยายทีวีตามขนาดจอ — เช็กทั้งความกว้างและความสูงเพื่อไม่ให้ล้นจอ */
+@media (max-width: 1150px) { .tv-tc { display: none; } }
+/* จอ 1000–1200px: ย่อทีวีลงนิด ไม่งั้นเมนูและข้อความฝั่งขวาล้นจอ */
+@media (max-width: 1200px) { .stage { zoom: .82; } }
 @media (min-width: 1600px) and (min-height: 860px) { .stage { zoom: 1.2; } }
 @media (min-width: 2000px) and (min-height: 960px) { .stage { zoom: 1.4; } }
 @media (min-width: 2400px) and (min-height: 1080px) { .stage { zoom: 1.6; } }
@@ -131,6 +147,9 @@ button.dial:hover { transform: rotate(45deg); }
 .p-face img { width: 100%; height: 100%; object-fit: cover; }
 .p-me { width: 130px; top: 0; right: 90px; --r: 8deg; }
 .p-work { width: 100px; top: 70px; left: 110px; --r: -12deg; animation-delay: -2s; }
+/* โพลารอยด์เล็กเป็นภาพสี (ไม่ขาวดำ) */
+.p-work .poster.has-image { filter: none; }
+.p-img > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 @keyframes floaty { 50% { transform: rotate(var(--r)) translateY(-8px); } }
 
 .note {
@@ -177,6 +196,5 @@ button.dial:hover { transform: rotate(45deg); }
   .tv-right { align-items: flex-start; }
   .collect { text-align: left; }
   .keep, .flower { display: none; }
-  .years { position: static; margin-top: 10px; }
 }
 @media (max-width: 420px) { .stage { zoom: .56; } }
