@@ -44,7 +44,6 @@
 .flower { stroke: var(--red); }
 
 /* ---------- PROFILE / ID CARD ---------- */
-.strap { background: linear-gradient(90deg, #b0060f, var(--red) 50%, #9c050e); }
 .idcard, :root[data-theme='dark'] .idcard { background: linear-gradient(160deg, #ef1a24, #a3060f 70%, #6d040a); color: #fff; }
 .idcard-water, :root[data-theme='dark'] .idcard-water { -webkit-text-stroke-color: rgba(255, 255, 255, .12); }
 .idcard-bar, :root[data-theme='dark'] .idcard-bar { background: #fff; }

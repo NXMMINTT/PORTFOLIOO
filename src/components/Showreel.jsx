@@ -6,11 +6,19 @@ const AUTO = 4000 // เลื่อนเองทุกกี่ ms (โหม
 const pad = (n) => String(n).padStart(2, '0')
 const format = (v) => (v.wide ? 'แนวนอน 16:9' : 'แนวตั้ง 9:16')
 const canPlay = (v) => Boolean(v.id || v.tiktok)
-// เล่นในหน้าเว็บ: คลิปที่มีลิงก์ TikTok ใช้ตัวเล่นของ TikTok ไม่งั้นใช้ตัวเล่นของ Google Drive
+// เล่นในหน้าเว็บ: คลิปที่มีลิงก์ TikTok / Instagram / Facebook / YouTube ใช้ตัวเล่นของแพลตฟอร์มนั้น ไม่งั้นใช้ตัวเล่นของ Google Drive
 const tiktokId = (url) => url.match(/video\/(\d+)/)?.[1]
-const embedSrc = (v) => v.tiktok
+const igCode = (url) => url.match(/\/(?:reels?|p)\/([\w-]+)/)?.[1]
+const ytId = (url) => url.match(/(?:v=|youtu\.be\/|shorts\/)([\w-]{11})/)?.[1]
+export const embedSrc = (v) => v.tiktok
   ? `https://www.tiktok.com/player/v1/${tiktokId(v.tiktok)}?autoplay=1&rel=0`
-  : `https://drive.google.com/file/d/${v.id}/preview`
+  : v.ig
+    ? `https://www.instagram.com/reel/${igCode(v.ig)}/embed`
+    : v.fb
+      ? `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(v.fb)}&show_text=false&autoplay=true`
+      : v.yt
+        ? `https://www.youtube.com/embed/${ytId(v.yt)}?autoplay=1&rel=0`
+        : `https://drive.google.com/file/d/${v.id}/preview`
 
 // SHOW REEL — 2 มุมมอง: "เลื่อนดู" (แถวการ์ดเลื่อนเอง ลาก/ปัดได้) และ "ตาราง" (เห็นทุกชิ้น)
 // กดการ์ดแล้วเล่นวิดีโอในหน้าเว็บ (ไม่ต้องออกไป Google Drive)
@@ -109,7 +117,7 @@ export default function Showreel() {
       <header className="block-head">
         <span className="block-no">03 —</span>
         <h2>SHOW<br />REEL</h2>
-        <p className="block-sub">วิดีโอที่ตัดต่อและผลิต {reel.length} ชิ้น<br />กดการ์ดเพื่อเล่นวิดีโอได้เลย</p>
+        <p className="block-sub">วิดีโอที่ตัดต่อและผลิต {reel.length} ชิ้น<br />มีผลงานรวมมากกว่า 1,000+ ชิ้น<br />กดการ์ดเพื่อเล่นวิดีโอได้เลย</p>
       </header>
 
       <div className="rl-bar">
@@ -202,7 +210,7 @@ export default function Showreel() {
           <figure className={v.wide ? 'wide' : 'tall'} onClick={(e) => e.stopPropagation()}>
             <div className="rl-frame">
               <iframe
-                key={v.tiktok || v.id}
+                key={v.tiktok || v.ig || v.fb || v.yt || v.id}
                 src={embedSrc(v)}
                 title={v.title}
                 allow="autoplay; fullscreen"
@@ -213,7 +221,7 @@ export default function Showreel() {
               <span className="rl-chip">{catLabel(v.cat)}</span>
               <strong>{v.title}</strong>
               <small>{v.client && `${v.client} · `}{format(v)} · {pad(playable.indexOf(open) + 1)} / {pad(playable.length)}</small>
-              <a href={v.link} target="_blank" rel="noreferrer">{v.tiktok ? 'เปิดใน TikTok ↗' : 'เปิดใน Google Drive ↗'}</a>
+              <a href={v.link} target="_blank" rel="noreferrer">{v.tiktok ? 'เปิดใน TikTok ↗' : v.ig ? 'เปิดใน Instagram ↗' : v.fb ? 'เปิดใน Facebook ↗' : v.yt ? 'เปิดใน YouTube ↗' : 'เปิดใน Google Drive ↗'}</a>
             </figcaption>
           </figure>
           {playable.length > 1 && (

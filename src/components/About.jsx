@@ -1,5 +1,8 @@
+import { lazy, Suspense } from 'react'
 import { profile, programs, skillGroups } from '../data/profile.js'
-import IdCard from './IdCard.jsx'
+
+// three.js หนัก — โหลดแยกไฟล์ หน้าเว็บส่วนอื่นจะได้ขึ้นเร็ว
+const Lanyard3D = lazy(() => import('./Lanyard3D.jsx'))
 import Socials from './Socials.jsx'
 
 // ไอคอนย่อของโปรแกรม (Dv, Pr, ...) — ชิปอื่นใช้จุดสีแดงแทน
@@ -16,7 +19,10 @@ export default function About({ dark, onToggleTheme }) {
       </button>
 
       <div className="ab-card">
-        <IdCard />
+        <Suspense fallback={<div className="lanyard3d" />}>
+          <Lanyard3D />
+        </Suspense>
+        <p className="lanyard3d-label">✦ ลองลากป้ายเล่นดูสิ ✦</p>
       </div>
 
       <div className="ab-body">

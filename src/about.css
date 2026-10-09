@@ -16,16 +16,21 @@
 
 /* บัตรห้อยจากเส้นขอบบนของส่วนนี้ */
 .ab-card { align-self: start; position: sticky; top: 0; }
-.ab-card .lanyard { position: relative; left: auto; margin: -90px auto 0; }
+/* ป้าย 3D (Lanyard3D.jsx): แคนวาสสูงเริ่มจากเส้นขอบบน กว้างเกินคอลัมน์นิดหน่อยให้เหวี่ยงได้ */
+.lanyard3d { height: 860px; margin: -90px -100px -80px; touch-action: none; }
+.lanyard3d-label { margin-top: -10px; text-align: center; font-size: 13px; letter-spacing: .14em; color: var(--mute); }
 
 .ab-title { font-size: clamp(54px, 6.5vw, 112px); font-weight: 500; letter-spacing: -.05em; line-height: .84; }
 .ab-title::after { content: '.'; color: var(--red, var(--ink)); }
-.ab-lead { margin-top: 30px; max-width: 62ch; font-size: 16px; line-height: 1.75; }
-.ab-note { margin-top: 10px; max-width: 62ch; font-size: 14px; line-height: 1.6; color: var(--mute); }
+.ab-lead { margin-top: 30px; max-width: 62ch; font-size: 16px; line-height: 1.75; white-space: pre-line; }
+.ab-note { margin-top: 10px; max-width: 62ch; font-size: 14px; line-height: 1.6; color: var(--mute); white-space: pre-line; }
 
 /* ----- ช่อง YouTube / TikTok: การ์ดเล็กเรียงแนวตั้ง ข้างข้อความแนะนำตัว ----- */
 .ab-intro { display: grid; grid-template-columns: minmax(0, 1fr) 224px; gap: 0 40px; padding-right: 32px; align-items: start; }
 .ab-socials { display: flex; flex-direction: column; gap: 8px; margin-top: -24px; }
+/* หัวข้อเล็กเหนือการ์ดช่อง */
+.ab-socials-title { display: flex; align-items: center; gap: 7px; margin: 0 0 2px 6px; font-size: 12px; font-weight: 600; color: var(--mute); }
+.ab-socials-title::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--red, #e50914); }
 .social {
   --brand: var(--red, #e50914);
   position: relative; display: flex; align-items: center; gap: 9px; height: 36px; padding: 0 16px 0 4px;
@@ -99,7 +104,7 @@ a.social:hover .social-logo { transform: translateX(3px); background: var(--chro
   .about-me { grid-template-columns: 1fr; padding: 0 var(--gut) 50px; }
   .about-me .pill-switch { grid-column: 1 / -1; }
   .ab-card { position: static; margin-bottom: 30px; }
-  .ab-card .lanyard { margin: 0 auto; }
+  .lanyard3d { height: 520px; margin: 0; touch-action: pan-y; }
   .ab-grid { grid-template-columns: 1fr; }
   .ab-intro { grid-template-columns: 1fr; padding-right: 0; }
   .ab-socials { margin-top: 22px; width: min(100%, 240px); }

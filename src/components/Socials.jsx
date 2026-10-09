@@ -19,6 +19,7 @@ const logos = {
 export default function Socials() {
   return (
     <div className="ab-socials">
+      <p className="ab-socials-title">ช่องคอนเทนต์ส่วนตัว</p>
       {socials.map((s) => {
         const Tag = s.url ? 'a' : 'div'
         return (

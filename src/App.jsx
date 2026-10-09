@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
-import { profile, works } from './data/profile.js'
+import { profile, reel, works } from './data/profile.js'
 import About from './components/About.jsx'
 import Contact from './components/Contact.jsx'
 import MoviePoster from './components/MoviePoster.jsx'
 import Journey from './components/Journey.jsx'
 import Poster from './components/Poster.jsx'
 import PosterGallery from './components/PosterGallery.jsx'
-import Showreel from './components/Showreel.jsx'
+import Showreel, { embedSrc } from './components/Showreel.jsx'
 import StickyNav from './components/StickyNav.jsx'
 import TvHero from './components/TvHero.jsx'
 import useReveal from './components/useReveal.js'
@@ -19,6 +19,7 @@ export default function App() {
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(true)
   const [hover, setHover] = useState(false)
+  const [watch, setWatch] = useState(false)
   const n = works.length
 
   const go = useCallback((i) => setIndex(((i % n) + n) % n), [n])
@@ -38,6 +39,20 @@ export default function App() {
 
   const lowerRef = useReveal()
   const w = works[index]
+  // วิดีโอของผลงานเด่น = คลิปใน SHOW REEL ที่ใช้รูปปกเดียวกัน — เล่นในหน้าเว็บ ไม่ต้องออกไปข้างนอก
+  const video = reel.find((v) => v.image === w.image && (v.id || v.tiktok || v.ig || v.fb || v.yt))
+
+  // หน้าต่างเล่นวิดีโอ: Esc ปิด และหยุดสไลด์ระหว่างดู
+  useEffect(() => {
+    if (!watch) return
+    const onKey = (e) => e.key === 'Escape' && setWatch(false)
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [watch])
 
   return (
     <div className="page">
@@ -75,7 +90,9 @@ export default function App() {
             <p className="now-en">{w.titleEn}</p>
             <p className="now-meta">{w.type} · {w.year} · {w.duration}</p>
             <p className="now-role">{w.role}</p>
-            {w.link && <a href={w.link} target="_blank" rel="noreferrer" className="link">▶ รับชมใน Google Drive</a>}
+            {video
+              ? <button className="link" onClick={() => { setWatch(true); setPlaying(false) }}>▶ รับชมวิดีโอ</button>
+              : w.link && <a href={w.link} target="_blank" rel="noreferrer" className="link">▶ รับชมวิดีโอ</a>}
           </div>
 
           <div className="thumbs">
@@ -101,6 +118,21 @@ export default function App() {
         </div>
         </div>
       </section>
+
+      {watch && video && (
+        <div className="rl-modal" onClick={() => setWatch(false)} role="dialog" aria-label={video.title}>
+          <button className="lb-close" aria-label="ปิด">✕</button>
+          <figure className={video.wide ? 'wide' : 'tall'} onClick={(e) => e.stopPropagation()}>
+            <div className="rl-frame">
+              <iframe src={embedSrc(video)} title={video.title} allow="autoplay; fullscreen" allowFullScreen />
+            </div>
+            <figcaption>
+              <strong>{w.title}</strong>
+              <small>{w.type} · {w.year} · {w.duration}</small>
+            </figcaption>
+          </figure>
+        </div>
+      )}
 
       <Showreel />
       <PosterGallery />
