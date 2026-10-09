@@ -23,9 +23,9 @@ export default function Socials() {
         const Tag = s.url ? 'a' : 'div'
         return (
           <Tag
-            key={s.platform}
+            key={s.url || s.platform}
             className={`social ${s.platform}`}
-            {...(s.url ? { href: s.url, target: '_blank', rel: 'noreferrer', 'aria-label': `เปิดช่อง ${s.name} บน ${s.label}` } : {})}
+            {...(s.url ? { href: s.url, target: '_blank', rel: 'noreferrer', 'aria-label': `เปิดช่อง ${s.handle} บน ${s.label}` } : {})}
           >
             <span className="social-logo">{logos[s.platform]}</span>
             <span className="social-text">

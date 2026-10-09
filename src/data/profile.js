@@ -103,10 +103,10 @@ export const works = [
   },
 ]
 
-// วิดีโอทั้งหมดจาก Google Drive (cat: ai | ads | tiktok)
+// วิดีโอทั้งหมดจาก Google Drive (cat: ai | ads | tiktok) — ใส่ tiktok: "ลิงก์คลิป" ได้ เว็บจะเล่นจาก TikTok แทน Drive
 export const videos = [
   { cat: 'ai', client: 'Masterart', title: 'สีเขียวหรือสีฟ้า', img: 'green', id: '13JxjEYGQKAf1AYpBWzABMmu3RBgaIxD9' },
-  { cat: 'ai', client: 'Masterart', title: 'ทำไมวันจันทร์สีเหลือง', img: 'monday', id: '1rO04ttf9dQ7u0GuQc3Ug0i0DgEDzaTTw' },
+  { cat: 'ai', client: 'Masterart', title: 'ทำไมวันจันทร์สีเหลือง', img: 'monday', id: '1rO04ttf9dQ7u0GuQc3Ug0i0DgEDzaTTw', tiktok: 'https://www.tiktok.com/@masterart_th/video/7679829354637004052' },
   { cat: 'ai', client: 'แถวนี้ผีดุ', title: 'รถไฟผีดุ', img: 'ghosttrain', id: '1yGbQLHtImQMloKol0v_dQqBS4M4OuhLb', wide: true },
   { cat: 'ai', client: 'Elephant', title: 'ปลั๊กไฟเรืองแสง', img: 'plug', id: '1LkhuqlAWazbmjI9xnQ2TcOm1KICfNRJv' },
   { cat: 'ai', client: '', title: 'ถ้าคุณไม่ได้ดื่มน้ำ 7 วัน', img: 'water7', id: '11feXgYXOQ3shPqLFThGCNDfU5Dq9-YxX' },
@@ -133,7 +133,7 @@ export const videos = [
   { cat: 'tiktok', client: 'NIDA', title: 'ศาลทั่วไปกับศาลทหารต่างกันอย่างไร', img: 'nida', id: '1H_bpif1VWF10XKszCyqGOz982Xvvf2mL' },
   { cat: 'tiktok', client: 'Wrapcar', title: 'Porsche Taycan', img: 'wrapcar', id: '1XA2kOpemSoGCrnRwxiSYA8sC-OEaZycl' },
   { cat: 'tiktok', client: 'วินนี่เดอะคาร์', title: 'ทำยังไงให้พนักงานเคารพ', img: 'winnie', id: '1xwa7dV4N1f9eTx4p2dAlQF2RDalimqN9' },
-].map((v) => ({ ...v, image: `/images/works/${v.img}.jpg`, link: DRIVE(v.id) }))
+].map((v) => ({ ...v, image: `/images/works/${v.img}.jpg`, link: v.tiktok || DRIVE(v.id) }))
 
 // โปสเตอร์ที่ทำด้วย AI
 export const posters = [
@@ -188,11 +188,12 @@ export const experience = [
   { year: '2021', icon: '🎥', title: 'Alive or Dead', roles: ['ผู้กำกับ', 'ตัดต่อ'], clients: [], detail: 'ภาพยนตร์สั้นในมหาวิทยาลัย' },
 ]
 
-// ช่องโซเชียล (หน้า ABOUT ME) — ใส่ลิงก์ ชื่อช่อง และยอดผู้ติดตามเอง เช่น followers: '12.5K'
+// ช่องโซเชียล (หน้า ABOUT ME) — ใส่ลิงก์ ชื่อช่อง และยอดผู้ติดตามเอง เช่น followers: '12.5K' (platform: youtube | tiktok)
 // ยังไม่มีลิงก์ให้เว้น url: '' ไว้ การ์ดจะแสดงแต่กดไม่ได้
 export const socials = [
-  { platform: 'youtube', label: 'YouTube', handle: '', url: '', followers: '' },
-  { platform: 'tiktok', label: 'TikTok', handle: '', url: '', followers: '' },
+  { platform: 'tiktok', label: 'TikTok', handle: '@iftheycanspeak', url: 'https://www.tiktok.com/@iftheycanspeak', followers: '21.1K' },
+  { platform: 'tiktok', label: 'TikTok', handle: '@crazyboneman0', url: 'https://www.tiktok.com/@crazyboneman0', followers: '9.2K' },
+  { platform: 'tiktok', label: 'TikTok', handle: '@cookieriety', url: 'https://www.tiktok.com/@cookieriety', followers: '1.3K' },
 ]
 
 export const contact = {

@@ -5,6 +5,12 @@ const PREVIEW = 8 // จำนวนการ์ดที่โชว์ก่�
 const AUTO = 4000 // เลื่อนเองทุกกี่ ms (โหมดเลื่อนดู)
 const pad = (n) => String(n).padStart(2, '0')
 const format = (v) => (v.wide ? 'แนวนอน 16:9' : 'แนวตั้ง 9:16')
+const canPlay = (v) => Boolean(v.id || v.tiktok)
+// เล่นในหน้าเว็บ: คลิปที่มีลิงก์ TikTok ใช้ตัวเล่นของ TikTok ไม่งั้นใช้ตัวเล่นของ Google Drive
+const tiktokId = (url) => url.match(/video\/(\d+)/)?.[1]
+const embedSrc = (v) => v.tiktok
+  ? `https://www.tiktok.com/player/v1/${tiktokId(v.tiktok)}?autoplay=1&rel=0`
+  : `https://drive.google.com/file/d/${v.id}/preview`
 
 // SHOW REEL — 2 มุมมอง: "เลื่อนดู" (แถวการ์ดเลื่อนเอง ลาก/ปัดได้) และ "ตาราง" (เห็นทุกชิ้น)
 // กดการ์ดแล้วเล่นวิดีโอในหน้าเว็บ (ไม่ต้องออกไป Google Drive)
@@ -76,7 +82,7 @@ export default function Showreel() {
   }
 
   // หน้าต่างเล่นวิดีโอ: Esc ปิด, ←/→ ไปเรื่องก่อน/ถัดไป (ข้ามเรื่องที่ไม่มีไฟล์)
-  const playable = list.map((p, i) => (p.id ? i : -1)).filter((i) => i >= 0)
+  const playable = list.map((p, i) => (canPlay(p) ? i : -1)).filter((i) => i >= 0)
   const step = (dir) => {
     const at = playable.indexOf(open)
     setOpen(playable[(at + dir + playable.length) % playable.length])
@@ -152,21 +158,21 @@ export default function Showreel() {
             )}
             <li>
               <button
-                className={`rl-card ${p.id ? '' : 'no-video'}`}
-                onClick={() => p.id && setOpen(i)}
-                aria-label={p.id ? `เล่นวิดีโอ ${p.title}` : p.title}
+                className={`rl-card ${canPlay(p) ? '' : 'no-video'}`}
+                onClick={() => canPlay(p) && setOpen(i)}
+                aria-label={canPlay(p) ? `เล่นวิดีโอ ${p.title}` : p.title}
               >
                 <span className="rl-thumb">
                   <img src={p.image} alt="" loading="lazy" draggable={false} />
                   <span className="rl-chip">{catLabel(p.cat)}</span>
-                  {p.id ? <span className="rl-play" aria-hidden="true">▶</span> : <span className="rl-cinema">ฉายในโรงภาพยนตร์</span>}
+                  {canPlay(p) ? <span className="rl-play" aria-hidden="true">▶</span> : <span className="rl-cinema">ฉายในโรงภาพยนตร์</span>}
                 </span>
                 <span className="rl-info">
                   <strong>{p.title}</strong>
                   <small>{p.desc}</small>
                   <span className="rl-meta">
                     {p.client && p.client !== 'Short Film' && <em>{p.client}</em>}
-                    {p.id && <em>{format(p)}</em>}
+                    {canPlay(p) && <em>{format(p)}</em>}
                   </span>
                 </span>
               </button>
@@ -196,8 +202,8 @@ export default function Showreel() {
           <figure className={v.wide ? 'wide' : 'tall'} onClick={(e) => e.stopPropagation()}>
             <div className="rl-frame">
               <iframe
-                key={v.id}
-                src={`https://drive.google.com/file/d/${v.id}/preview`}
+                key={v.tiktok || v.id}
+                src={embedSrc(v)}
                 title={v.title}
                 allow="autoplay; fullscreen"
                 allowFullScreen
@@ -207,7 +213,7 @@ export default function Showreel() {
               <span className="rl-chip">{catLabel(v.cat)}</span>
               <strong>{v.title}</strong>
               <small>{v.client && `${v.client} · `}{format(v)} · {pad(playable.indexOf(open) + 1)} / {pad(playable.length)}</small>
-              <a href={v.link} target="_blank" rel="noreferrer">เปิดใน Google Drive ↗</a>
+              <a href={v.link} target="_blank" rel="noreferrer">{v.tiktok ? 'เปิดใน TikTok ↗' : 'เปิดใน Google Drive ↗'}</a>
             </figcaption>
           </figure>
           {playable.length > 1 && (
