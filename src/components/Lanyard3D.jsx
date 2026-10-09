@@ -351,93 +351,35 @@ function drawFront(g, img) {
   g.restore()
 }
 
-// หลังบัตร: หัวบัตรแบบด้านหน้า / LET'S TALK / QR ในกรอบช่องมองภาพกล้อง / ป้าย LINE ID / แถบฟิล์มล่าง
+// หลังบัตร (มินิมอล): QR ใหญ่กลางบัตร / ADD ME ON LINE / LINE ID / เส้นบาง / ชื่อช่อง
 function drawBack(g, img) {
   cardShape(g)
-  watermark(g, profile.since.slice(-2))
   g.fillStyle = '#fff'
+  g.textAlign = 'center'
   g.textBaseline = 'alphabetic'
 
-  // หัวบัตร ให้เข้าชุดกับด้านหน้า
-  g.font = `600 50px ${SANS}`
-  g.letterSpacing = '4px'
-  g.textAlign = 'left'
-  g.fillText('CONTACT', 80, 150)
-  g.textAlign = 'right'
-  g.fillText('B-SIDE', TEX_W - 80, 150)
-
-  g.textAlign = 'center'
-  g.font = `800 104px ${SANS}`
-  g.letterSpacing = '4px'
-  g.fillText("LET'S TALK!", TEX_W / 2, 300)
-  g.font = `500 36px ${THAI}`
-  g.letterSpacing = '0px'
-  g.globalAlpha = 0.9
-  g.fillText('สแกน QR แอดไลน์ คุยงานได้เลย', TEX_W / 2, 362)
-  g.globalAlpha = 1
-
-  // QR บนการ์ดขาวมีเงา
-  const box = 540, bx = (TEX_W - box) / 2, by = 430, pad = 28
-  g.save()
-  g.shadowColor = 'rgba(0, 0, 0, .35)'
-  g.shadowBlur = 40
-  g.shadowOffsetY = 14
+  // QR บนการ์ดขาว
+  const box = 600, bx = (TEX_W - box) / 2, by = 250, pad = 34
   g.beginPath()
-  g.roundRect(bx, by, box, box, 36)
+  g.roundRect(bx, by, box, box, 44)
   g.fill()
-  g.restore()
   if (img) g.drawImage(img, bx + pad, by + pad, box - pad * 2, box - pad * 2)
 
-  // มุมช่องมองภาพกล้องรอบ QR
-  const o = 34, len = 78
-  g.strokeStyle = '#fff'
-  g.lineWidth = 9
-  g.lineCap = 'round'
-  ;[[bx - o, by - o, 1, 1], [bx + box + o, by - o, -1, 1], [bx - o, by + box + o, 1, -1], [bx + box + o, by + box + o, -1, -1]].forEach(([x, y, sx, sy]) => {
-    g.beginPath()
-    g.moveTo(x, y + sy * len)
-    g.lineTo(x, y)
-    g.lineTo(x + sx * len, y)
-    g.stroke()
-  })
+  g.font = `500 30px ${SANS}`
+  g.letterSpacing = '12px'
+  g.globalAlpha = 0.8
+  g.fillText('ADD ME ON LINE', TEX_W / 2, 975)
+  g.globalAlpha = 1
+  g.font = `700 64px ${SANS}`
+  g.letterSpacing = '2px'
+  g.fillText(contact.line, TEX_W / 2, 1060)
 
-  // ป้าย LINE ID สีขาว
-  const label = 'LINE ID', id = contact.line
-  g.font = `600 30px ${SANS}`
-  g.letterSpacing = '4px'
-  const lw = g.measureText(label).width
-  g.font = `800 50px ${SANS}`
-  g.letterSpacing = '1px'
-  const iw = g.measureText(id).width
-  const gap = 26, pw = lw + gap + iw + 96, ph = 96, px = (TEX_W - pw) / 2, py = 1065
-  g.beginPath()
-  g.roundRect(px, py, pw, ph, ph / 2)
-  g.fill()
-  g.textAlign = 'left'
-  g.fillStyle = '#e50914'
-  g.font = `600 30px ${SANS}`
-  g.letterSpacing = '4px'
-  g.fillText(label, px + 48, py + 60)
-  g.fillStyle = '#7a050c'
-  g.font = `800 50px ${SANS}`
-  g.letterSpacing = '1px'
-  g.fillText(id, px + 48 + lw + gap, py + 66)
-
-  // แถบฟิล์มด้านล่าง: รูหนามเตยบน-ล่าง + ชื่อช่อง
-  const fy = 1250, fh = 130
-  g.fillStyle = 'rgba(0, 0, 0, .38)'
-  g.fillRect(0, fy, TEX_W, fh)
-  g.fillStyle = 'rgba(255, 255, 255, .85)'
-  for (let x = 14; x < TEX_W; x += 64) {
-    g.beginPath()
-    g.roundRect(x, fy + 12, 34, 20, 5)
-    g.roundRect(x, fy + fh - 32, 34, 20, 5)
-    g.fill()
-  }
-  g.fillStyle = '#fff'
-  g.textAlign = 'center'
-  g.font = `600 32px ${SANS}`
+  g.globalAlpha = 0.5
+  g.fillRect(TEX_W / 2 - 60, 1140, 120, 3)
+  g.globalAlpha = 0.85
+  g.font = `600 28px ${SANS}`
   g.letterSpacing = '10px'
-  g.fillText(`${profile.handle.toUpperCase()} · VIDEO EDITOR`, TEX_W / 2, fy + fh / 2 + 11)
+  g.fillText(profile.handle.toUpperCase(), TEX_W / 2, 1335)
+  g.globalAlpha = 1
   g.restore()
 }
