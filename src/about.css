@@ -1,0 +1,75 @@
+/* ================= ABOUT ME ================= */
+.about-me {
+  position: relative; display: grid; grid-template-columns: 340px 1fr; gap: 0 64px;
+  padding: 90px var(--gut) 80px; border-top: 1px solid var(--line);
+  /* พื้นตารางจาง ๆ */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+:root[data-theme='light'] .about-me {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, .05) 1px, transparent 1px);
+}
+
+/* บัตรห้อยจากเส้นขอบบนของส่วนนี้ */
+.ab-card { align-self: start; position: sticky; top: 0; }
+.ab-card .lanyard { position: relative; left: auto; margin: -90px auto 0; }
+
+.ab-title { font-size: clamp(54px, 6.5vw, 112px); font-weight: 500; letter-spacing: -.05em; line-height: .84; }
+.ab-title::after { content: '.'; color: var(--red, var(--ink)); }
+.ab-lead { margin-top: 30px; max-width: 62ch; font-size: 16px; line-height: 1.75; }
+.ab-note { margin-top: 10px; max-width: 62ch; font-size: 14px; line-height: 1.6; color: var(--mute); }
+
+.ab-facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.ab-facts li { padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; }
+.ab-facts li:first-child { background: var(--red, var(--ink)); border-color: var(--red, var(--ink)); color: #fff; }
+
+.ab-label { margin: 40px 0 14px; font-size: 15px; font-weight: 600; }
+.ab-label span { color: var(--red, var(--ink)); font-size: 11px; margin-left: 4px; }
+
+/* ----- การ์ดทักษะ ----- */
+.ab-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.ab-group {
+  padding: 16px 18px 18px; border: 1px dashed var(--line); border-radius: 12px;
+  background: color-mix(in srgb, var(--panel) 85%, transparent);
+  transition: border-color .3s, transform .3s;
+}
+.ab-group:hover { border-color: var(--red, var(--ink)); border-style: solid; transform: translateY(-3px); }
+.ab-group header { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; }
+.ab-group h4 { font-size: 16px; font-weight: 700; color: var(--red, var(--ink)); }
+.ab-group small { font-size: 11px; color: var(--mute); }
+
+.ab-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.ab-chips li {
+  display: inline-flex; align-items: center; gap: 7px; padding: 5px 12px 5px 8px;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--bg); font-size: 12.5px;
+  transition: border-color .2s, transform .2s;
+}
+.ab-chips li:hover { border-color: var(--red, var(--ink)); transform: translateY(-2px); }
+.ab-ico {
+  display: grid; place-items: center; width: 20px; height: 20px; border-radius: 5px;
+  border: 1px solid var(--red, var(--ink)); color: var(--red, var(--ink)); font-size: 9px; font-weight: 700;
+}
+.ab-dot { width: 6px; height: 6px; margin-left: 4px; border-radius: 50%; background: var(--red, var(--ink)); }
+
+/* โน้ตแปะ "พร้อมรับงานใหม่!" */
+.ab-sticky {
+  position: relative; display: block; width: fit-content; margin: 30px 0 0 auto; padding: 12px 20px;
+  background: var(--red, var(--ink)); color: #fff; font-family: 'Courier Prime', 'IBM Plex Sans Thai', monospace; font-size: 15px; font-weight: 700;
+  transform: rotate(-4deg); box-shadow: 0 10px 20px -6px rgba(229, 9, 20, .45);
+}
+.ab-sticky::before {
+  content: ''; position: absolute; top: -8px; left: 50%; width: 46px; height: 15px; margin-left: -23px;
+  background: rgba(255, 255, 255, .35); transform: rotate(3deg);
+}
+
+@media (max-width: 860px) {
+  .about-me { grid-template-columns: 1fr; padding: 0 var(--gut) 50px; }
+  .about-me .pill-switch { grid-column: 1 / -1; }
+  .ab-card { position: static; margin-bottom: 30px; }
+  .ab-card .lanyard { margin: 0 auto; }
+  .ab-grid { grid-template-columns: 1fr; }
+}

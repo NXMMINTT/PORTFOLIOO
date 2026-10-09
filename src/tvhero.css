@@ -1,0 +1,182 @@
+/* ================= TV HERO ================= */
+.tvhero {
+  --clay-hi: #f7f7f7; --clay: #dcdcdc; --clay-lo: #b9b9b9;
+  /* หน้าแรกเต็มจอ: ไม่ใช้กรอบ 1400px เหมือนส่วนอื่น ข้อความชิดขอบจอ */
+  --hgut: clamp(24px, 4vw, 96px);
+  position: relative; display: grid; grid-template-columns: minmax(250px, 1fr) auto minmax(210px, 1fr); grid-template-rows: auto 1fr;
+  min-height: 100vh; min-height: 100svh; padding: 26px var(--hgut) 30px; gap: 0 10px;
+}
+.tv-bar { position: relative; grid-column: 1 / -1; display: flex; align-items: center; gap: 24px; }
+/* โลโก้ทรงสเลท: ไม้ตีลายทแยงด้านบน ตี "แปะ" ตอนเปิดหน้า และยกขึ้นเมื่อชี้เมาส์ */
+.tv-brand { display: inline-flex; flex-direction: column; font-weight: 800; font-size: clamp(13px, .75vw, 16px); line-height: 1.1; letter-spacing: .02em; }
+.brand-stick {
+  height: 10px; border: 1.5px solid var(--ink); border-radius: 3px 3px 0 0;
+  background: repeating-linear-gradient(-45deg, var(--ink) 0 7px, var(--bg) 7px 14px);
+  transform-origin: 0 100%; animation: clap .8s .3s cubic-bezier(.5, 0, .3, 1.6) both; transition: transform .25s;
+}
+.brand-board { padding: 6px 10px 7px; border: 1.5px solid var(--ink); border-top: 0; border-radius: 0 0 3px 3px; }
+.tv-brand:hover .brand-stick { transform: rotate(-14deg); animation: none; }
+@keyframes clap { 0% { transform: rotate(-24deg); } 60% { transform: rotate(0); } 75% { transform: rotate(-4deg); } 100% { transform: rotate(0); } }
+
+/* ไทม์โค้ดกลางแถบ */
+.tv-tc { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: 'Courier Prime', monospace; font-size: clamp(12px, .75vw, 15px); letter-spacing: .12em; color: var(--mute); font-variant-numeric: tabular-nums; }
+.tv-tc b { color: var(--red, #e50914); margin-right: 6px; }
+
+/* เมนูในแคปซูล — เลื่อนเมาส์แล้วพื้นแดง */
+.tv-nav {
+  margin-left: auto; display: flex; gap: 4px; padding: 5px; border: 1px solid var(--line); border-radius: 999px;
+  background: color-mix(in srgb, var(--panel) 70%, transparent); backdrop-filter: blur(8px);
+  font-size: clamp(13px, .75vw, 16px);
+}
+.tv-nav a { display: flex; align-items: baseline; gap: 6px; padding: 8px 16px; border-radius: 999px; transition: background .25s, color .25s; }
+.tv-nav small { font-family: 'Courier Prime', monospace; font-size: .72em; color: var(--red, #e50914); transition: color .25s; }
+.tv-nav a:hover { background: var(--red, #e50914); color: #fff; }
+.tv-nav a:hover small { color: rgba(255, 255, 255, .7); }
+
+.tv-cta {
+  display: flex; align-items: center; gap: 8px; padding: 13px 22px; border-radius: 999px;
+  background: var(--red, #e50914); color: #fff; font-size: clamp(13px, .75vw, 16px); font-weight: 600;
+  box-shadow: 0 10px 24px -8px rgba(229, 9, 20, .6); transition: transform .25s, box-shadow .25s;
+}
+.tv-cta span { transition: transform .25s; }
+.tv-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -8px rgba(229, 9, 20, .8); }
+.tv-cta:hover span { transform: translate(2px, -2px); }
+
+.tv-left { display: flex; flex-direction: column; justify-content: center; gap: 34px; padding-bottom: 20px; }
+.iam { font-size: clamp(30px, 3vw, 76px); font-weight: 500; letter-spacing: .03em; line-height: 1.15; }
+.iam b { font-weight: 800; }
+.q { font-family: var(--serif); font-size: .9em; vertical-align: top; }
+.seek { font-size: clamp(13px, .8vw, 17px); line-height: 1.5; }
+.tv-contact { font-size: clamp(12px, .7vw, 15px); line-height: 1.6; position: absolute; bottom: 30px; left: var(--hgut); }
+
+.tv-right { position: relative; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; }
+.collect { font-weight: 700; font-size: clamp(15px, 1vw, 22px); letter-spacing: .03em; line-height: 2.1; text-align: right; text-transform: uppercase; }
+.box { background: var(--ink); color: var(--bg); padding: 2px 6px; margin-right: 4px; }
+.keep { position: absolute; right: -14px; top: 18%; writing-mode: vertical-rl; font-family: 'Courier Prime', monospace; font-size: 13px; letter-spacing: .25em; }
+.flower { width: 38px; margin: 40px 50px 0 0; fill: none; stroke: var(--ink); stroke-width: 1.4; animation: spin 18s linear infinite; }
+.years { position: absolute; bottom: 0; right: 0; font-weight: 600; font-size: clamp(14px, .8vw, 17px); }
+
+/* ----- stage ----- */
+.stage { position: relative; width: 580px; height: 540px; justify-self: center; align-self: center; }
+/* ขยายทีวีตามขนาดจอ — เช็กทั้งความกว้างและความสูงเพื่อไม่ให้ล้นจอ */
+@media (min-width: 1600px) and (min-height: 860px) { .stage { zoom: 1.2; } }
+@media (min-width: 2000px) and (min-height: 960px) { .stage { zoom: 1.4; } }
+@media (min-width: 2400px) and (min-height: 1080px) { .stage { zoom: 1.6; } }
+.pedestal {
+  position: absolute; left: 10px; right: 10px; bottom: 0; height: 120px; z-index: 0; border-radius: 10px 10px 4px 4px;
+  background: linear-gradient(180deg, var(--clay-hi), var(--clay) 30%, var(--clay-lo));
+  box-shadow: inset 0 6px 8px rgba(255, 255, 255, .7), inset 0 -10px 18px rgba(0, 0, 0, .12), 0 30px 40px -20px rgba(0, 0, 0, .35);
+}
+.pedestal::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 24px; border-radius: 10px 10px 0 0; background: linear-gradient(180deg, #fff, var(--clay)); opacity: .8; }
+
+.tv {
+  position: absolute; left: 50%; bottom: 108px; width: 340px; z-index: 2;
+  transform: translateX(-50%) rotate(-3deg); animation: bob 4s ease-in-out infinite;
+}
+@keyframes bob { 50% { transform: translateX(-50%) rotate(-3deg) translateY(-6px); } }
+.tv-body {
+  position: relative; display: flex; gap: 14px; padding: 20px; height: 250px; border-radius: 34px;
+  background: linear-gradient(145deg, var(--clay-hi), var(--clay) 55%, var(--clay-lo));
+  box-shadow: inset 10px 10px 18px rgba(255, 255, 255, .9), inset -12px -14px 22px rgba(0, 0, 0, .18), 0 26px 30px -12px rgba(0, 0, 0, .4);
+}
+.tv-screen {
+  position: relative; flex: 1; border-radius: 28px / 34px; overflow: hidden; background: #131313;
+  box-shadow: inset 0 0 0 6px #2a2a2a, inset 0 0 40px rgba(255, 255, 255, .12), 0 2px 0 rgba(255, 255, 255, .8);
+  cursor: pointer; color: #f1f1f1;
+}
+.tv-screen .poster { filter: grayscale(1) contrast(1.2) brightness(.85); }
+.tv-screen .poster-title { display: none; }
+.ch-title { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 6px; animation: flicker 4s infinite; }
+.ch-port { font-family: 'Courier Prime', monospace; font-size: 34px; font-weight: 700; letter-spacing: -.02em; padding: 0 12px; border: 2px solid #f1f1f1; border-radius: 6px; }
+.ch-name { font-family: 'Courier Prime', 'IBM Plex Sans Thai', monospace; font-size: 16px; }
+@keyframes flicker { 0%, 96%, 100% { opacity: 1; } 97% { opacity: .6; } 98% { opacity: 1; } 99% { opacity: .7; } }
+.ch-work { position: absolute; inset: 0; animation: rise .4s ease both; }
+.ch-label { position: absolute; left: 12px; bottom: 10px; right: 12px; font-family: 'Courier Prime', 'IBM Plex Sans Thai', monospace; font-size: 11px; text-align: left; text-shadow: 0 1px 3px #000; }
+.scan {
+  position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, .05) 0 1px, transparent 1px 3px),
+              radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, .18), transparent 50%);
+}
+.tv-screen.noise::after {
+  content: ''; position: absolute; inset: -50%; z-index: 3;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: static .1s steps(3) infinite;
+}
+@keyframes static { to { transform: translate(10%, -10%); } }
+.tv-panel { width: 54px; display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 10px; }
+.dial {
+  width: 38px; height: 38px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #8c8c8c 60%, #3d3d3d);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, .3); position: relative; transition: transform .3s;
+}
+.dial::after { content: ''; position: absolute; left: 50%; top: 4px; width: 3px; height: 12px; margin-left: -1.5px; border-radius: 2px; background: #222; }
+button.dial:hover { transform: rotate(45deg); }
+.dial.small { width: 24px; height: 24px; }
+.dial.small::after { height: 7px; top: 3px; }
+.grill { width: 34px; height: 60px; margin-top: 6px; border-radius: 6px; background: repeating-linear-gradient(0deg, #9e9e9e 0 3px, transparent 3px 7px); opacity: .7; }
+.antenna { position: absolute; bottom: 100%; left: 50%; width: 3px; height: 100px; background: #2a2a2a; transform-origin: 50% 100%; border-radius: 2px; }
+.antenna::after { content: ''; position: absolute; top: -6px; left: -4px; width: 11px; height: 11px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #333); }
+.a1 { transform: rotate(-28deg); }
+.a2 { transform: rotate(22deg); height: 80px; }
+.leg { position: absolute; top: 100%; width: 16px; height: 16px; background: #1e1e1e; border-radius: 0 0 4px 4px; }
+.leg.l { left: 60px; transform: skewX(12deg); }
+.leg.r { right: 60px; transform: skewX(-12deg); }
+
+.polaroid-sm {
+  position: absolute; z-index: 1; background: #fafafa; padding: 8px 8px 26px; border-radius: 2px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, .22); transform: rotate(var(--r)); animation: floaty 5s ease-in-out infinite;
+}
+.p-img { position: relative; aspect-ratio: 1; overflow: hidden; background: #333; }
+.p-img .poster-sm { position: absolute; inset: 0; aspect-ratio: auto; }
+.p-face { display: grid; place-items: center; background: linear-gradient(150deg, #cfcfcf, #3a3a3a); color: #fff; font-size: 30px; font-weight: 800; }
+.p-face img { width: 100%; height: 100%; object-fit: cover; }
+.p-me { width: 130px; top: 0; right: 90px; --r: 8deg; }
+.p-work { width: 100px; top: 70px; left: 110px; --r: -12deg; animation-delay: -2s; }
+@keyframes floaty { 50% { transform: rotate(var(--r)) translateY(-8px); } }
+
+.note {
+  position: absolute; z-index: 3; left: 70px; bottom: 250px; width: 108px; padding: 14px 10px; text-align: center;
+  background: #f1f1f1; color: #111; font-family: 'Courier Prime', 'IBM Plex Sans Thai', monospace; font-size: 15px; font-weight: 700; line-height: 1.2;
+  transform: rotate(-9deg); box-shadow: 0 8px 14px rgba(0, 0, 0, .18);
+}
+.note::before { content: ''; position: absolute; top: -9px; left: 50%; width: 46px; height: 16px; margin-left: -23px; background: rgba(160, 160, 160, .55); transform: rotate(3deg); }
+.note small { display: block; font-size: 8.5px; font-weight: 400; margin-top: 6px; }
+
+.popcorn { position: absolute; z-index: 3; left: 40px; bottom: 104px; width: 84px; }
+.pop-top { position: relative; height: 34px; }
+.pop-top i {
+  position: absolute; width: 26px; height: 24px; border-radius: 45% 55% 50% 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, #d4d4d4); box-shadow: 0 2px 3px rgba(0, 0, 0, .15);
+}
+.pop-top i:nth-child(1) { left: 4px; top: 12px; }
+.pop-top i:nth-child(2) { left: 22px; top: 4px; }
+.pop-top i:nth-child(3) { left: 42px; top: 8px; }
+.pop-top i:nth-child(4) { left: 58px; top: 14px; }
+.pop-top i:nth-child(5) { left: 14px; top: 20px; }
+.pop-top i:nth-child(6) { left: 34px; top: 18px; }
+.pop-top i:nth-child(7) { left: 30px; top: -6px; }
+.pop-bucket {
+  height: 74px; clip-path: polygon(0 0, 100% 0, 86% 100%, 14% 100%);
+  background: repeating-linear-gradient(90deg, #151515 0 12px, #f3f3f3 12px 24px);
+  box-shadow: inset 0 -10px 14px rgba(0, 0, 0, .2);
+}
+
+.reel { position: absolute; z-index: 3; right: 40px; bottom: 108px; width: 116px; animation: spin 14s linear infinite; filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .3)); }
+.reel circle { fill: #1b1b1b; }
+.reel .hole { fill: var(--clay); }
+
+@media (max-width: 1000px) {
+  .tvhero { grid-template-columns: 1fr; padding: 20px 16px 30px; gap: 20px; }
+  .tv-bar { flex-wrap: wrap; gap: 12px; }
+  .tv-tc { display: none; }
+  .tv-cta { margin-left: auto; padding: 10px 16px; }
+  .tv-nav { order: 3; width: 100%; justify-content: space-between; overflow-x: auto; font-size: 12px; }
+  .tv-nav a { padding: 7px 10px; }
+  .tv-left { padding: 20px 0 0; gap: 14px; }
+  .tv-contact { position: static; }
+  .stage { zoom: .62; justify-self: center; }
+  .tv-right { align-items: flex-start; }
+  .collect { text-align: left; }
+  .keep, .flower { display: none; }
+  .years { position: static; margin-top: 10px; }
+}
+@media (max-width: 420px) { .stage { zoom: .56; } }

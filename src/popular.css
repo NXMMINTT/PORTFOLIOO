@@ -1,0 +1,89 @@
+/* ================= MOST POPULAR (การ์ดเลื่อนได้) ================= */
+.popular { position: relative; padding: 80px 0 40px; overflow: hidden; }
+.pop-head { position: relative; z-index: 2; margin: 0 var(--gut) 24px; }
+
+.pop-bg {
+  position: absolute; top: 0; bottom: 0; left: 30%; right: 0; z-index: 0; pointer-events: none;
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; opacity: .035;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 25%, #000 75%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 25%, #000 75%, transparent);
+}
+.pop-bg img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
+
+.pop-bar-top { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 0 var(--gut); }
+.pop-arrows { display: flex; gap: 8px; }
+.pop-arrows button {
+  width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line);
+  color: var(--ink); font-size: 22px; line-height: 1; transition: background .2s, border-color .2s, color .2s, opacity .2s;
+}
+.pop-arrows button:hover:not(:disabled) { background: var(--red, #e50914); border-color: var(--red, #e50914); color: #fff; }
+.pop-arrows button:disabled { opacity: .3; cursor: default; }
+
+.pop-tabs { position: relative; z-index: 2; display: flex; gap: 26px; font-size: 12px; }
+.pop-tabs button { position: relative; padding: 4px 0; color: var(--mute); transition: color .2s; }
+.pop-tabs button:hover { color: var(--ink); }
+.pop-tabs button.active { color: var(--red, #e50914); font-weight: 600; }
+.pop-tabs button.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: currentColor; }
+
+.pop-track {
+  position: relative; z-index: 2; display: flex; gap: 26px; margin-top: 10px;
+  padding: 26px 40% 30px var(--gut); scroll-padding-left: var(--gut);
+  overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+  cursor: grab; outline: none;
+  -webkit-mask: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent);
+  mask: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent);
+}
+.pop-track::-webkit-scrollbar { display: none; }
+.pop-track.dragging { cursor: grabbing; user-select: none; }
+.pop-track.dragging .pop-card { pointer-events: none; }
+
+.pop-slot { flex: none; width: 340px; scroll-snap-align: start; }
+.pop-card {
+  position: relative; display: block; width: 100%; height: 480px; border-radius: 26px; overflow: hidden;
+  background: #1a1a1a; color: #fff;
+  transform: scale(.9); transform-origin: 50% 60%; opacity: .75;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, .35);
+  transition: transform .5s cubic-bezier(.2, .8, .2, 1), opacity .5s, box-shadow .5s;
+}
+.pop-card.active { transform: scale(1.04); opacity: 1; box-shadow: 0 30px 50px -10px rgba(0, 0, 0, .7), 0 0 0 1px rgba(229, 9, 20, .6); }
+.pop-card:hover { opacity: 1; }
+.pop-card img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(1) contrast(1.1); transition: filter .6s, transform .8s;
+}
+.pop-card.active img, .pop-card:hover img { filter: none; }
+.pop-card.active img { transform: scale(1.05); }
+.pop-card::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, .55) 65%, rgba(0, 0, 0, .92));
+}
+.pop-chip {
+  position: absolute; z-index: 2; top: 18px; left: 18px; padding: 4px 12px; border-radius: 999px;
+  background: var(--red, #e50914); font-size: 12px; letter-spacing: .04em;
+}
+.pop-info { position: absolute; z-index: 2; left: 24px; right: 52px; bottom: 24px; }
+.pop-info h3 { font-size: 32px; font-weight: 800; line-height: 1.08; letter-spacing: -.01em; }
+.pop-info p {
+  margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: .85;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.pop-mark { position: absolute; z-index: 2; right: 22px; bottom: 28px; width: 17px; fill: none; stroke: #fff; stroke-width: 1.6; }
+
+.pop-count { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 4px; }
+.pop-count span { font-size: 12px; letter-spacing: .12em; color: var(--mute); min-width: 64px; text-align: right; }
+.pop-bar { width: 180px; height: 2px; background: var(--line); }
+.pop-bar i { display: block; height: 100%; background: var(--red, #e50914); transition: width .4s ease; }
+.pop-tabs sup { font-size: 9px; margin-left: 1px; }
+
+@media (max-width: 860px) {
+  .popular { padding-top: 60px; }
+  .pop-head { margin: 0 16px 20px; }
+  .pop-bar-top { padding: 0 16px; }
+  .pop-arrows { display: none; }
+  .pop-bg { left: 0; }
+  .pop-tabs { overflow-x: auto; gap: 20px; white-space: nowrap; }
+  .pop-track { -webkit-mask: none; mask: none; margin-top: 0; padding: 20px 16px 26px; scroll-padding-left: 16px; gap: 14px; }
+  .pop-slot { width: 72vw; }
+  .pop-card { height: min(100vw, 440px); }
+}
+
