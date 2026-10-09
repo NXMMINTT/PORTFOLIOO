@@ -1,19 +1,12 @@
-import { posters, profile, programs, skillGroups, videos } from '../data/profile.js'
+import { profile, programs, skillGroups } from '../data/profile.js'
 import IdCard from './IdCard.jsx'
+import Socials from './Socials.jsx'
 
 // ไอคอนย่อของโปรแกรม (Dv, Pr, ...) — ชิปอื่นใช้จุดสีแดงแทน
 const shortOf = Object.fromEntries(programs.map((p) => [p.name, p.short]))
 
 // ABOUT ME — บัตรห้อยสายคล้องด้านซ้าย, แนะนำตัว + การ์ดทักษะด้านขวา
 export default function About({ dark, onToggleTheme }) {
-  const facts = [
-    profile.nickname,
-    `${profile.age} ปี`,
-    profile.status,
-    `${videos.length} วิดีโอ`,
-    `${posters.length} โปสเตอร์`,
-  ]
-
   return (
     <section className="about-me" id="profile">
       <button className="pill-switch" onClick={onToggleTheme} aria-label="สลับธีมสว่าง/มืด">
@@ -28,11 +21,14 @@ export default function About({ dark, onToggleTheme }) {
 
       <div className="ab-body">
         <h2 className="ab-title">ABOUT ME</h2>
-        <p className="ab-lead">{profile.about}</p>
-        <p className="ab-note">{profile.additional}</p>
-        <ul className="ab-facts">
-          {facts.map((f) => <li key={f}>{f}</li>)}
-        </ul>
+        {/* แนะนำตัวซ้าย + ช่อง YouTube/TikTok แนวตั้งในที่ว่างด้านขวา */}
+        <div className="ab-intro">
+          <div>
+            <p className="ab-lead">{profile.about}</p>
+            <p className="ab-note">{profile.additional}</p>
+          </div>
+          <Socials />
+        </div>
 
         <h3 className="ab-label">ทักษะ <span aria-hidden="true">▾</span></h3>
         <div className="ab-grid">
@@ -54,7 +50,7 @@ export default function About({ dark, onToggleTheme }) {
           ))}
         </div>
 
-        <p className="ab-sticky">📌 พร้อมรับงานใหม่!</p>
+        <p className="ab-sticky"> พร้อมรับงานใหม่!</p>
       </div>
     </section>
   )

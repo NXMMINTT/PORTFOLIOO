@@ -1,187 +1,220 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { posters, reel, reelCats } from '../data/profile.js'
+import { Fragment, useEffect, useRef, useState } from 'react'
+import { reel, reelCats } from '../data/profile.js'
 
-const AUTO = 4500
+const PREVIEW = 8 // จำนวนการ์ดที่โชว์ก่อนกด "ดูทั้งหมด" (โหมดตาราง)
+const AUTO = 4000 // เลื่อนเองทุกกี่ ms (โหมดเลื่อนดู)
 const pad = (n) => String(n).padStart(2, '0')
+const format = (v) => (v.wide ? 'แนวนอน 16:9' : 'แนวตั้ง 9:16')
 
-// SHOW REEL — การ์ดเลื่อนได้: ลากเมาส์ / ปัดนิ้ว / ลูกศร / คีย์บอร์ด + เลื่อนเองอัตโนมัติ
-// คลิกการ์ดเพื่อเปิดวิดีโอใน Google Drive
+// SHOW REEL — 2 มุมมอง: "เลื่อนดู" (แถวการ์ดเลื่อนเอง ลาก/ปัดได้) และ "ตาราง" (เห็นทุกชิ้น)
+// กดการ์ดแล้วเล่นวิดีโอในหน้าเว็บ (ไม่ต้องออกไป Google Drive)
 export default function Showreel() {
   const [cat, setCat] = useState('all')
-  const [active, setActive] = useState(0)
-  const [paused, setPaused] = useState(false)
-  const [dragging, setDragging] = useState(false)
-  const trackRef = useRef(null)
+  const [all, setAll] = useState(false)
+  const [open, setOpen] = useState(-1)
+  const [view, setView] = useState('slide')
+  const [hover, setHover] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const track = useRef(null)
   const drag = useRef(null)
-  const snapTimer = useRef(null)
-  const list = cat === 'all' ? reel : reel.filter((p) => p.cat === cat)
+
+  // "ทั้งหมด" เรียงตามลำดับหมวดในแถบ (Short Film → AI Video → โฆษณา → TikTok) ในหมวดยังเรียงงานเด่นขึ้นก่อน
+  const order = reelCats.map((c) => c.key)
+  const list = cat === 'all'
+    ? [...reel].sort((a, b) => order.indexOf(a.cat) - order.indexOf(b.cat))
+    : reel.filter((p) => p.cat === cat)
+  const shown = view === 'slide' || all ? list : list.slice(0, PREVIEW)
   const count = (key) => (key === 'all' ? reel.length : reel.filter((p) => p.cat === key).length)
+  const catLabel = (key) => reelCats.find((c) => c.key === key)?.label
 
-  const scrollToCard = useCallback((i, smooth = true) => {
-    const track = trackRef.current
-    const card = track?.children[i]
-    if (!card) return
-    const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0
-    track.scrollTo({ left: card.offsetLeft - pad, behavior: smooth ? 'smooth' : 'auto' })
-  }, [])
+  const pick = (key) => { setCat(key); setAll(false); track.current?.scrollTo({ left: 0 }) }
 
-  const go = (i) => scrollToCard(Math.max(0, Math.min(list.length - 1, i)))
-
-  // หาการ์ดที่อยู่ใกล้ขอบซ้ายที่สุด = การ์ดที่ active
-  const nearest = () => {
-    const track = trackRef.current
-    const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0
-    const x = track.scrollLeft + pad
-    let best = 0
-    let dist = Infinity
-    ;[...track.children].forEach((c, i) => {
-      const d = Math.abs(c.offsetLeft - x)
-      if (d < dist) { dist = d; best = i }
-    })
-    // เลื่อนสุดขวาแล้วให้การ์ดสุดท้าย active
-    if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) best = list.length - 1
-    return best
+  // ----- โหมดเลื่อนดู -----
+  const cardW = () => track.current.querySelector('li:not(.rl-divider)')?.getBoundingClientRect().width + 20 || 300
+  const slide = (dir) => {
+    const t = track.current
+    if (!t) return
+    const atEnd = t.scrollLeft + t.clientWidth >= t.scrollWidth - 4
+    if (dir > 0 && atEnd) t.scrollTo({ left: 0, behavior: 'smooth' })
+    else t.scrollBy({ left: dir * cardW(), behavior: 'smooth' })
   }
-  const onScroll = () => setActive(nearest())
-
-  // เลื่อนเองอัตโนมัติ (วนกลับไปการ์ดแรก)
+  const onScroll = () => {
+    const t = track.current
+    setProgress(t.scrollWidth > t.clientWidth ? t.scrollLeft / (t.scrollWidth - t.clientWidth) : 1)
+  }
+  // เลื่อนเองช้า ๆ — หยุดเมื่อชี้เมาส์ ลากอยู่ หรือเปิดวิดีโอ
   useEffect(() => {
-    if (paused || dragging || list.length < 2) return
-    const t = setTimeout(() => scrollToCard(active + 1 >= list.length ? 0 : active + 1), AUTO)
-    return () => clearTimeout(t)
-  }, [active, paused, dragging, list.length, scrollToCard])
-
-  // เปลี่ยนหมวด → กลับไปการ์ดแรก
-  useEffect(() => {
-    setActive(0)
-    scrollToCard(0, false)
-  }, [cat, scrollToCard])
-
-  // ลากด้วยเมาส์ (ทัชสกรีนใช้การเลื่อนปกติของเบราว์เซอร์)
-  const onPointerDown = (e) => {
+    if (view !== 'slide' || hover || open >= 0) return
+    const t = setInterval(() => slide(1), AUTO)
+    return () => clearInterval(t)
+  }, [view, hover, open, cat])
+  // ลากด้วยเมาส์ (มือถือใช้การปัดปกติ)
+  const onDown = (e) => {
     if (e.pointerType !== 'mouse' || e.button !== 0) return
-    e.preventDefault()
-    clearTimeout(snapTimer.current)
-    trackRef.current.style.scrollSnapType = 'none'
-    drag.current = { x: e.clientX, left: trackRef.current.scrollLeft, start: nearest(), moved: false }
-    setDragging(true)
+    drag.current = { x: e.clientX, left: track.current.scrollLeft, moved: false }
   }
-  const onPointerMove = (e) => {
+  const onMove = (e) => {
     const d = drag.current
-    if (!d || d.done !== undefined) return
+    if (!d) return
     const dx = e.clientX - d.x
-    d.dx = dx
     if (!d.moved && Math.abs(dx) > 5) {
       d.moved = true
-      trackRef.current.setPointerCapture?.(e.pointerId)
+      track.current.classList.add('dragging')
     }
-    trackRef.current.scrollLeft = d.left - dx
+    if (d.moved) track.current.scrollLeft = d.left - dx
   }
-  const endDrag = (e) => {
+  const onUp = () => {
     const d = drag.current
-    if (!d || d.done !== undefined) return
-    if (e && d.dx === undefined && e.clientX !== undefined) d.dx = e.clientX - d.x
-    // ลากเกิน 40px = เลื่อนอย่างน้อย 1 การ์ดตามทิศที่ลาก
-    let target = nearest()
-    if ((d.dx || 0) < -40 && target <= d.start) target = d.start + 1
-    if ((d.dx || 0) > 40 && target >= d.start) target = d.start - 1
-    target = Math.max(0, Math.min(list.length - 1, target))
-    drag.current = { ...d, done: d.moved }
-    setDragging(false)
-    scrollToCard(target)
-    setTimeout(() => { drag.current = null }, 0)
-    // เปิด snap กลับหลังเลื่อนเสร็จ (ถ้าเปิดทันที เบราว์เซอร์จะตัดการเลื่อนแบบ smooth)
-    snapTimer.current = setTimeout(() => {
-      if (trackRef.current) trackRef.current.style.scrollSnapType = ''
-    }, 600)
+    if (!d) return
+    track.current.classList.remove('dragging')
+    // ลากแล้วปล่อย ไม่นับเป็นการกดเปิดวิดีโอ
+    if (d.moved) setTimeout(() => { drag.current = null }, 0)
+    else drag.current = null
   }
-  // ถ้าเพิ่งลาก ไม่ให้คลิกเปิดลิงก์
   const onClickCapture = (e) => {
-    if (drag.current?.done) {
-      e.preventDefault()
-      e.stopPropagation()
-    }
+    if (drag.current?.moved) { e.preventDefault(); e.stopPropagation() }
   }
 
-  const onKey = (e) => {
-    if (e.key === 'ArrowRight') { e.preventDefault(); go(active + 1) }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); go(active - 1) }
+  // หน้าต่างเล่นวิดีโอ: Esc ปิด, ←/→ ไปเรื่องก่อน/ถัดไป (ข้ามเรื่องที่ไม่มีไฟล์)
+  const playable = list.map((p, i) => (p.id ? i : -1)).filter((i) => i >= 0)
+  const step = (dir) => {
+    const at = playable.indexOf(open)
+    setOpen(playable[(at + dir + playable.length) % playable.length])
   }
+  useEffect(() => {
+    if (open < 0) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') setOpen(-1)
+      if (e.key === 'ArrowRight') step(1)
+      if (e.key === 'ArrowLeft') step(-1)
+    }
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', onKey)
+    }
+  })
+
+  const v = list[open]
 
   return (
-    <section
-      className="popular"
-      id="showreel"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      <div className="pop-bg" aria-hidden="true">
-        {posters.concat(posters).slice(0, 12).map((p, i) => (
-          <img key={i} src={p.image} alt="" loading="lazy" />
-        ))}
-      </div>
-
-      <header className="block-head pop-head">
+    <section className="block showreel" id="showreel">
+      <header className="block-head">
         <span className="block-no">03 —</span>
         <h2>SHOW<br />REEL</h2>
-        <p className="block-sub">วิดีโอที่ตัดต่อและผลิต<br />ลากหรือปัดเพื่อเลื่อน · คลิกเพื่อดูใน Google Drive</p>
+        <p className="block-sub">วิดีโอที่ตัดต่อและผลิต {reel.length} ชิ้น<br />กดการ์ดเพื่อเล่นวิดีโอได้เลย</p>
       </header>
 
-      <div className="pop-bar-top">
-        <nav className="pop-tabs" aria-label="หมวดผลงาน">
+      <div className="rl-bar">
+        <nav className="rl-tabs" aria-label="หมวดผลงาน">
           {reelCats.map((c) => (
-            <button key={c.key} className={cat === c.key ? 'active' : ''} onClick={() => setCat(c.key)}>
+            <button key={c.key} className={cat === c.key ? 'active' : ''} onClick={() => pick(c.key)}>
               {c.label} <sup>{count(c.key)}</sup>
             </button>
           ))}
         </nav>
-        <div className="pop-arrows">
-          <button onClick={() => go(active - 1)} disabled={active === 0} aria-label="ก่อนหน้า">‹</button>
-          <button onClick={() => go(active + 1)} disabled={active === list.length - 1} aria-label="ถัดไป">›</button>
+        <div className="rl-tools">
+          {view === 'slide' && (
+            <span className="rl-arrows">
+              <button onClick={() => slide(-1)} aria-label="เลื่อนไปทางซ้าย">‹</button>
+              <button onClick={() => slide(1)} aria-label="เลื่อนไปทางขวา">›</button>
+            </span>
+          )}
+          <span className="rl-view" role="group" aria-label="มุมมอง">
+            <button className={view === 'slide' ? 'active' : ''} onClick={() => setView('slide')}>⇆ เลื่อนดู</button>
+            <button className={view === 'grid' ? 'active' : ''} onClick={() => setView('grid')}>▦ ตาราง</button>
+          </span>
         </div>
       </div>
 
-      <div
-        ref={trackRef}
-        className={`pop-track ${dragging ? 'dragging' : ''}`}
-        onScroll={onScroll}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
-        onClickCapture={onClickCapture}
-        onKeyDown={onKey}
-        tabIndex={0}
-        aria-roledescription="carousel"
+      <ul
+        ref={track}
+        className={view === 'slide' ? 'rl-track' : 'rl-grid'}
+        key={view}
+        onScroll={view === 'slide' ? onScroll : undefined}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => { setHover(false); onUp() }}
+        onPointerDown={view === 'slide' ? onDown : undefined}
+        onPointerMove={view === 'slide' ? onMove : undefined}
+        onPointerUp={view === 'slide' ? onUp : undefined}
+        onClickCapture={view === 'slide' ? onClickCapture : undefined}
       >
-        {list.map((p, i) => {
-          const Tag = p.link ? 'a' : 'div'
-          return (
-            <div className="pop-slot" key={p.image}>
-            <Tag
-              className={`pop-card ${i === active ? 'active' : ''}`}
-              {...(p.link ? { href: p.link, target: '_blank', rel: 'noreferrer' } : {})}
-              draggable={false}
-            >
-              <img src={p.image} alt={p.title} draggable={false} />
-              <span className="pop-chip">{p.client || reelCats.find((c) => c.key === p.cat)?.label}</span>
-              <div className="pop-info">
-                <h3>{p.title}</h3>
-                <p>{p.desc}</p>
-              </div>
-              <svg className="pop-mark" viewBox="0 0 16 20" aria-hidden="true">
-                <path d="M2 1h12v18l-6-4.5L2 19z" />
-              </svg>
-            </Tag>
-            </div>
-          )
-        })}
-      </div>
+        {shown.map((p, i) => (
+          <Fragment key={p.image}>
+            {/* หมวด "ทั้งหมด": ขึ้นหัวบทใหม่ทุกครั้งที่เปลี่ยนหมวด ให้รู้ว่าเป็นอีกหัวข้อ */}
+            {cat === 'all' && p.cat !== shown[i - 1]?.cat && (
+              <li className="rl-divider" aria-hidden="true">
+                <small>CH.{pad(order.indexOf(p.cat))}</small>
+                <strong>{catLabel(p.cat)}</strong>
+                <span>{count(p.cat)} ชิ้น</span>
+              </li>
+            )}
+            <li>
+              <button
+                className={`rl-card ${p.id ? '' : 'no-video'}`}
+                onClick={() => p.id && setOpen(i)}
+                aria-label={p.id ? `เล่นวิดีโอ ${p.title}` : p.title}
+              >
+                <span className="rl-thumb">
+                  <img src={p.image} alt="" loading="lazy" draggable={false} />
+                  <span className="rl-chip">{catLabel(p.cat)}</span>
+                  {p.id ? <span className="rl-play" aria-hidden="true">▶</span> : <span className="rl-cinema">ฉายในโรงภาพยนตร์</span>}
+                </span>
+                <span className="rl-info">
+                  <strong>{p.title}</strong>
+                  <small>{p.desc}</small>
+                  <span className="rl-meta">
+                    {p.client && p.client !== 'Short Film' && <em>{p.client}</em>}
+                    {p.id && <em>{format(p)}</em>}
+                  </span>
+                </span>
+              </button>
+            </li>
+          </Fragment>
+        ))}
+      </ul>
 
-      <div className="pop-count">
-        <span>{pad(active + 1)} / {pad(list.length)}</span>
-        <div className="pop-bar"><i style={{ width: `${((active + 1) / list.length) * 100}%` }} /></div>
-      </div>
+      {view === 'slide' && (
+        <div className="rl-progress" aria-hidden="true"><i style={{ width: `${Math.max(8, progress * 100)}%` }} /></div>
+      )}
+
+      {view === 'grid' && list.length > PREVIEW && (
+        <div className="rl-more">
+          <button onClick={() => setAll(!all)}>
+            {all ? 'ย่อกลับ ↑' : `ดูทั้งหมด (${list.length}) ↓`}
+          </button>
+        </div>
+      )}
+
+      {v && (
+        <div className="rl-modal" onClick={() => setOpen(-1)} role="dialog" aria-label={v.title}>
+          <button className="lb-close" aria-label="ปิด">✕</button>
+          {playable.length > 1 && (
+            <button className="lb-nav l" onClick={(e) => { e.stopPropagation(); step(-1) }} aria-label="ก่อนหน้า">‹</button>
+          )}
+          <figure className={v.wide ? 'wide' : 'tall'} onClick={(e) => e.stopPropagation()}>
+            <div className="rl-frame">
+              <iframe
+                key={v.id}
+                src={`https://drive.google.com/file/d/${v.id}/preview`}
+                title={v.title}
+                allow="autoplay; fullscreen"
+                allowFullScreen
+              />
+            </div>
+            <figcaption>
+              <span className="rl-chip">{catLabel(v.cat)}</span>
+              <strong>{v.title}</strong>
+              <small>{v.client && `${v.client} · `}{format(v)} · {pad(playable.indexOf(open) + 1)} / {pad(playable.length)}</small>
+              <a href={v.link} target="_blank" rel="noreferrer">เปิดใน Google Drive ↗</a>
+            </figcaption>
+          </figure>
+          {playable.length > 1 && (
+            <button className="lb-nav r" onClick={(e) => { e.stopPropagation(); step(1) }} aria-label="ถัดไป">›</button>
+          )}
+        </div>
+      )}
     </section>
   )
 }
