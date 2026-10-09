@@ -122,6 +122,7 @@ export const videos = [
   { cat: 'ads', client: 'Dr.Tattoo', title: 'Dr.Tattoo (4K)', img: 'drtattoo', id: '1YVv8AbD97t6_0KUsWsSvmGkk0E6urW6T', wide: true },
   { cat: 'ads', client: 'สิริ เพลส', title: 'สิริ เพลส', img: 'siriplace', id: '1C28hZwb025bnrHtm0DGiE_f8jzkarS-t', tiktok: 'https://www.tiktok.com/@sansiriplc/video/7579502815232511249' },
   { cat: 'ads', client: 'Roys', title: 'Roys', img: 'roys', id: '12asoJSjCQrq0oeMBkbYm1aWpbu9EEjY8', wide: true, fb: 'https://www.facebook.com/reel/1842083450071667' },
+  { cat: 'ads', client: 'JL Republic', title: 'BFDL04 ลูกบิดประตูแบบก้าน Bluetooth', img: 'jlbfdl04', wide: true, yt: 'https://www.youtube.com/watch?v=57JAsMyUW04' },
   { cat: 'tiktok', client: 'หมอนัดมาเล่า', title: 'เบื้องหลังโศกนาฏกรรมของทัชมาฮาล', img: 'tajmahal', id: '1J-Yzfff3qa5d8Ary0xCsIJvWT7vc4LLm', ig: 'https://www.instagram.com/reels/DNiTPO9Th25/' },
   { cat: 'tiktok', client: 'Microsystem', title: 'Microsystem EP.1', img: 'micro1', id: '1l8pEM2hB4OKY7iuHfeMvwGeMKUPHfjjE' },
   { cat: 'tiktok', client: 'Microsystem', title: 'Microsystem EP.2', img: 'micro2', id: '16ih-irhAcj3hJk8JH0t9zbhRSvk9kjCN' },
