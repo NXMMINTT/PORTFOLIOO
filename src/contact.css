@@ -107,3 +107,6 @@
   .ct-mini b { font-size: 18px; }
   .ct-reel { width: 70px; right: 10px; bottom: 24px; }
 }
+
+/* ปุ่มไปหน้าแพ็คเกจ (บนหน้าแรก) */
+.ct-links .ct-more { border-color: var(--red); color: #fff; background: rgba(229, 9, 20, .18); }

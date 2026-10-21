@@ -138,7 +138,7 @@ export default function App() {
       <PosterGallery />
 
       {/* ---------------- FOOTER ---------------- */}
-      <Contact />
+      <Contact more />
 
       <footer className="footer">
         <div className="footer-word" aria-hidden="true">{profile.footerWord}</div>

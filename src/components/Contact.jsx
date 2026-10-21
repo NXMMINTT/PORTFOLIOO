@@ -1,8 +1,10 @@
 import { contact, profile } from '../data/profile.js'
+import { contactPage } from './navLinks.js'
 import useReveal from './useReveal.js'
 
 // LET'S TALK — ตั๋วหนังพร้อมต้นขั้ว ADMIT ONE + ตั๋วจิ๋วลอยและม้วนฟิล์มประดับ
-export default function Contact() {
+// more = โชว์ปุ่มไปหน้าแพ็คเกจ (ใช้บนหน้าแรก)
+export default function Contact({ more = false }) {
   const ref = useReveal()
   const drive = contact.links.find((l) => l.url.startsWith('http'))
 
@@ -44,6 +46,7 @@ export default function Contact() {
               <a href={`tel:${contact.phone.replace(/\s/g, '')}`}>TEL. {contact.phone}</a>
               <span>LINE: {contact.line}</span>
               {drive && <a href={drive.url} target="_blank" rel="noreferrer">{drive.label} ↗</a>}
+              {more && <a href={contactPage} className="ct-more">ดูแพ็คเกจตัดต่อ →</a>}
             </div>
 
             <dl className="tk-info">

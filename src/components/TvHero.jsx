@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { contact, profile, works } from '../data/profile.js'
-import { navLinks } from './navLinks.js'
+import { contactPage, navLinks } from './navLinks.js'
 import Poster from './Poster.jsx'
 
 // ไทม์โค้ดเดินแบบกล้องกำลังอัด (25 fps) นับจากตอนเปิดหน้า
@@ -51,7 +51,7 @@ export default function TvHero() {
             <a key={href} href={href}><small>{String(i + 1).padStart(2, '0')}</small>{label}</a>
           ))}
         </nav>
-        <a href="#contact" className="tv-cta">ติดต่องาน</a>
+        <a href={contactPage} className="tv-cta">ติดต่องาน</a>
       </header>
 
       <div className="tv-left">

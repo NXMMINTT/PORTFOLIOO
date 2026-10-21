@@ -6,3 +6,6 @@ export const navLinks = [
   ['#showreel', 'Showreel'],
   ['#posters', 'AI Poster'],
 ]
+
+// หน้าแพ็คเกจตัดต่อ + ช่องทางติดต่อ (contact/index.html)
+export const contactPage = '/contact/'

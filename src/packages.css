@@ -1,0 +1,81 @@
+/* ================= หน้า /contact/ — แพ็คเกจตัดต่อ + ช่องทางติดต่อ ================= */
+.pk { padding-top: 110px; } /* เว้นที่ให้แถบเมนูลอยด้านบน */
+
+/* ----- การ์ดแพ็คเกจ ----- */
+.pk-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.pk-card {
+  position: relative; display: flex; flex-direction: column; padding: 26px 24px 24px; border-radius: 16px;
+  background: var(--panel); border: 1px solid var(--line); transition: transform .3s, border-color .3s, box-shadow .3s;
+}
+.pk-card:hover { transform: translateY(-4px); border-color: var(--red); box-shadow: 0 20px 34px -18px rgba(229, 9, 20, .55); }
+.pk-card.hot {
+  background: radial-gradient(120% 80% at 0 0, rgba(229, 9, 20, .22), transparent 60%), var(--panel);
+  border-color: var(--red);
+}
+.pk-badge {
+  position: absolute; top: -11px; right: 20px; padding: 4px 12px; border-radius: 999px;
+  background: var(--red); color: #fff; font-size: 11px; font-weight: 600;
+}
+.pk-no { font-family: 'Courier Prime', monospace; font-size: 11px; letter-spacing: .12em; color: var(--red); }
+.pk-card h3 { margin-top: 12px; font-size: 22px; font-weight: 600; }
+.pk-desc { margin-top: 4px; font-size: 13px; color: var(--mute); }
+
+.pk-price { display: flex; align-items: baseline; gap: 4px; margin-top: 22px; font-size: 40px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+.pk-price small { font-size: 20px; font-weight: 600; }
+.pk-price span { margin-left: 6px; font-size: 13px; font-weight: 500; letter-spacing: 0; color: var(--mute); }
+
+.pk-card ul { flex: 1; display: grid; gap: 9px; align-content: start; margin-top: 22px; padding-top: 18px; border-top: 1px dashed var(--line); }
+.pk-card li { position: relative; padding-left: 20px; font-size: 14px; line-height: 1.45; }
+.pk-card li::before { content: '✓'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+
+.pk-time { margin-top: 20px; font-size: 12px; color: var(--mute); }
+.pk-time b { color: var(--ink); font-weight: 600; }
+
+.pk-btn {
+  margin-top: 14px; padding: 12px; border-radius: 999px; text-align: center; font-size: 14px; font-weight: 600;
+  border: 1px solid var(--ink); transition: background .2s, color .2s, border-color .2s;
+}
+.pk-btn:hover, .hot .pk-btn { background: var(--red); border-color: var(--red); color: #fff; }
+
+.pk-notes { display: flex; flex-wrap: wrap; gap: 8px 26px; margin-top: 28px; font-size: 12px; color: var(--mute); }
+.pk-notes li::before { content: '* '; color: var(--red); }
+
+/* ----- ช่องทางติดต่อ: การ์ด LINE ใหญ่ + แถวช่องอื่น ----- */
+.ch-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 18px; }
+.ch-line, .ch-row { border-radius: 16px; background: var(--panel); border: 1px solid var(--line); transition: border-color .25s, transform .25s; }
+.ch-line:hover, .ch-row:hover { border-color: var(--red); transform: translateY(-3px); }
+
+.ch-line {
+  display: flex; align-items: center; gap: 28px; padding: 26px;
+  background: radial-gradient(120% 90% at 0 0, rgba(229, 9, 20, .18), transparent 60%), var(--panel);
+}
+.ch-line img { flex: none; width: 170px; height: 170px; border-radius: 12px; background: #fff; padding: 8px; object-fit: contain; }
+.ch-line strong { font-size: 24px; }
+.ch-line small { display: block; margin-top: 8px; font-size: 13px; line-height: 1.5; color: var(--mute); }
+.ch-btn {
+  align-self: flex-start; margin-top: 18px; padding: 10px 22px; border-radius: 999px;
+  background: var(--red); color: #fff; font-size: 14px; font-weight: 600;
+}
+
+.ch-list { display: grid; gap: 12px; }
+.ch-row { display: flex; align-items: center; gap: 16px; padding: 16px 20px; }
+.ch-ico {
+  flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(229, 9, 20, .14); color: var(--red); font-size: 18px; font-weight: 700;
+}
+.ch-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.ch-label { font-family: 'Courier Prime', monospace; font-size: 11px; letter-spacing: .16em; color: var(--red); }
+.ch-text strong { font-size: 16px; font-weight: 600; overflow-wrap: anywhere; }
+.ch-go { font-size: 18px; color: var(--mute); transition: color .25s; }
+.ch-row:hover .ch-go { color: var(--red); }
+
+@media (max-width: 1100px) {
+  .pk-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ch-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 860px) {
+  .pk { padding-top: 90px; }
+  .pk-grid, .ch-grid { grid-template-columns: 1fr; }
+  .ch-line { flex-direction: column; align-items: flex-start; gap: 18px; padding: 22px; }
+  .ch-line img { width: 140px; height: 140px; }
+}
